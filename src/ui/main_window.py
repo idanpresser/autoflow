@@ -1,4 +1,8 @@
-from PySide6.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QListWidget
+from PySide6.QtWidgets import (
+    QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
+    QListWidget, QPushButton, QInputDialog, QListWidgetItem
+)
+from PySide6.QtCore import Qt
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -8,11 +12,55 @@ class MainWindow(QMainWindow):
         
         # Central widget and layout
         central_widget = QWidget(self)
-        layout = QVBoxLayout(central_widget)
+        main_layout = QVBoxLayout(central_widget)
+        
+        # Buttons panel (horizontal layout)
+        buttons_layout = QHBoxLayout()
+        
+        self.btn_add_type = QPushButton("Add Type Text", central_widget)
+        self.btn_add_type.setObjectName("btn_add_type_text")
+        self.btn_add_type.clicked.connect(self.on_add_type_text)
+        buttons_layout.addWidget(self.btn_add_type)
+        
+        self.btn_add_key = QPushButton("Add Press Key", central_widget)
+        self.btn_add_key.setObjectName("btn_add_press_key")
+        self.btn_add_key.clicked.connect(self.on_add_press_key)
+        buttons_layout.addWidget(self.btn_add_key)
+        
+        self.btn_add_wait = QPushButton("Add Wait", central_widget)
+        self.btn_add_wait.setObjectName("btn_add_wait")
+        self.btn_add_wait.clicked.connect(self.on_add_wait)
+        buttons_layout.addWidget(self.btn_add_wait)
+        
+        main_layout.addLayout(buttons_layout)
         
         # Step list widget
         self.step_list = QListWidget(central_widget)
         self.step_list.setObjectName("step_list")
+        main_layout.addWidget(self.step_list)
         
-        layout.addWidget(self.step_list)
         self.setCentralWidget(central_widget)
+
+    def on_add_type_text(self):
+        text, ok = QInputDialog.getText(self, "Add Type Text", "Enter text to type:")
+        if ok and text:
+            item = QListWidgetItem(f"Type Text: {text}", self.step_list)
+            item.setData(Qt.UserRole, {"type": "type_text", "text": text})
+            self.step_list.addItem(item)
+
+    def on_add_press_key(self):
+        keys_str, ok = QInputDialog.getText(self, "Add Press Key", "Enter keys (e.g. ctrl+c):")
+        if ok and keys_str:
+            keys = [k.strip() for k in keys_str.split('+') if k.strip()]
+            item = QListWidgetItem(f"Press Key: {keys_str}", self.step_list)
+            item.setData(Qt.UserRole, {"type": "keystroke", "keys": keys})
+            self.step_list.addItem(item)
+
+    def on_add_wait(self):
+        text, ok1 = QInputDialog.getText(self, "Add Wait for Text", "Enter target text to wait for:")
+        if ok1 and text:
+            timeout, ok2 = QInputDialog.getInt(self, "Add Wait for Text", "Enter timeout in seconds:", 30, 1, 3600)
+            if ok2:
+                item = QListWidgetItem(f"Wait for Text: {text} ({timeout}s)", self.step_list)
+                item.setData(Qt.UserRole, {"type": "wait_for_text", "text": text, "timeout_sec": timeout})
+                self.step_list.addItem(item)
