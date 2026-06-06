@@ -1,0 +1,30 @@
+# Environments and Runtimes
+.embedded_python/
+.venv/
+env/
+venv/
+ENV/
+
+# Python Cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDEs and Editors
+.vscode/
+.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.swp
+
+# OS Files
+Thumbs.db
+desktop.ini
+
+# Output / Build / Packaging
+dist/
+build/
+*.egg-info/
