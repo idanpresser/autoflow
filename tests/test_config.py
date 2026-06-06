@@ -1,6 +1,7 @@
 import pytest
 import json
-from src.utils.config import serialize_profile, ValidationError
+import os
+from src.utils.config import serialize_profile, save_profile_to_file, ValidationError
 
 def test_serialize_profile_success():
     profile = {
@@ -53,3 +54,32 @@ def test_serialize_profile_invalid_steps():
     with pytest.raises(ValidationError) as excinfo:
         serialize_profile(profile)
     assert "steps must be a list" in str(excinfo.value)
+
+def test_save_profile_to_file_success(tmp_path):
+    profile = {
+        "profile_name": "My Macro Profile",
+        "hotkey": "f9",
+        "steps": []
+    }
+    # Save it
+    file_path = save_profile_to_file(profile, tmp_path)
+    # Check that file exists
+    assert os.path.exists(file_path)
+    assert os.path.basename(file_path) == "My Macro Profile.json"
+    
+    # Read back and verify
+    with open(file_path, 'r') as f:
+        data = json.load(f)
+    assert data["profile_name"] == "My Macro Profile"
+
+def test_save_profile_to_file_validation_error(tmp_path):
+    profile = {
+        "profile_name": "", # Invalid (must be non-empty)
+        "hotkey": "f9",
+        "steps": []
+    }
+    with pytest.raises(ValidationError):
+        save_profile_to_file(profile, tmp_path)
+        
+    # Verify no files were created in tmp_path
+    assert len(list(tmp_path.iterdir())) == 0

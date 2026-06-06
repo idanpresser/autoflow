@@ -1,4 +1,5 @@
 import json
+import os
 
 class ValidationError(Exception):
     pass
@@ -30,3 +31,21 @@ def serialize_profile(profile_dict):
         return json.dumps(profile_dict, indent=2)
     except Exception as e:
         raise ValidationError(f"JSON serialization failed: {e}")
+
+def save_profile_to_file(profile_dict, folder_path):
+    """
+    Validates, serializes, and saves the profile to a file named
+    '{profile_name}.json' inside folder_path. Returns the path of the saved file.
+    """
+    serialized = serialize_profile(profile_dict)
+    
+    os.makedirs(folder_path, exist_ok=True)
+    filename = f"{profile_dict['profile_name']}.json"
+    file_path = os.path.join(folder_path, filename)
+    
+    try:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(serialized)
+        return file_path
+    except Exception as e:
+        raise IOError(f"Failed to write profile to file: {e}")
