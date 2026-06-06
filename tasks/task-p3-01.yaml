@@ -1,0 +1,34 @@
+id: "task-p3-01"
+title: "Implement high-speed screen capture using mss"
+phase: "Phase 3: \"Smart\" Triggers (SikuliX-inspired)"
+prerequisites: []
+requirements:
+- "Create src/vision/ocr.py."
+- "Implement capture_screen() returning full primary monitor screen."
+- "Use mss.mss() for high performance capture."
+- "Convert output raw screenshot buffer into a standard numpy array (BGR)."
+step_by_step_instructions:
+- "Create src/vision/ocr.py."
+- "Import mss and numpy."
+- "Implement capture_screen()."
+- "Use mss.mss() context manager, grab primary monitor bounds (sct.monitors[1])."
+- "Convert sct.grab(monitor) to numpy array and drop alpha channel (BGRA to BGR)."
+tdd_instructions:
+  tests_file: "tests/test_ocr.py"
+  assertions:
+  - "Assert that capture_screen returns a numpy ndarray."
+  - "Assert that the image dimensions are valid (height > 0, width > 0, channels == 3)."
+  mocking_guide:
+  - "For local headless tests, mock mss.mss().grab to return mock screen pixel values."
+implementation_details:
+  files_to_modify:
+  - "src/vision/ocr.py"
+  api_signature: |
+    import numpy as np
+    
+    def capture_screen() -> np.ndarray:
+        # High-speed capture of primary monitor using mss
+        pass
+  edge_cases:
+  - "Handle multiple monitors correctly, ensuring monitor index 1 is captured or fallback to monitor 0."
+verification_command: "pytest tests/test_ocr.py"

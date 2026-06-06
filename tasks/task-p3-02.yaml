@@ -1,0 +1,32 @@
+id: "task-p3-02"
+title: "Integrate Tesseract OCR text extraction"
+phase: "Phase 3: \"Smart\" Triggers (SikuliX-inspired)"
+prerequisites:
+- "task-p3-01"
+requirements:
+- "Implement extract_text(image_np) in src/vision/ocr.py."
+- "Convert source image to grayscale (preprocessing step) to optimize Tesseract reading rate."
+- "Call pytesseract.image_to_string, clean/strip result, and return text."
+step_by_step_instructions:
+- "In src/vision/ocr.py, import pytesseract and cv2 (OpenCV)."
+- "Implement extract_text(image_np)."
+- "If image is color, convert to grayscale using cv2.cvtColor(image_np, cv2.COLOR_BGR2GRAY)."
+- "Pass processed image to pytesseract.image_to_string()."
+- "Strip whitespace from the returned string and return."
+tdd_instructions:
+  tests_file: "tests/test_ocr.py"
+  assertions:
+  - "Assert that extract_text converts color image to gray."
+  - "Assert that string results match Tesseract outputs."
+  mocking_guide:
+  - "Mock pytesseract.image_to_string to return fixed strings to avoid local OCR dependencies during CI/CD tests."
+implementation_details:
+  files_to_modify:
+  - "src/vision/ocr.py"
+  api_signature: |
+    def extract_text(image_np: np.ndarray) -> str:
+        # preprocess and apply pytesseract
+        pass
+  edge_cases:
+  - "Check for empty numpy image input and raise ValueError."
+verification_command: "pytest tests/test_ocr.py"

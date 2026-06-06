@@ -1,0 +1,37 @@
+id: "task-p1-02"
+title: "Create the step list layout inside MainWindow"
+phase: "Phase 1: Core Foundation & UI Builder"
+prerequisites:
+- "task-p1-01"
+requirements:
+- "Must define a central widget inside MainWindow."
+- "Must use QHBoxLayout to divide the UI into a left side controls panel and right side step list."
+- "Right side must contain a QListWidget object named 'step_list'."
+step_by_step_instructions:
+- "In src/ui/main_window.py, import QWidget, QHBoxLayout, and QListWidget."
+- "In __init__, instantiate QWidget as the central widget, set layout to QHBoxLayout."
+- "Instantiate QListWidget and name its objectName to 'step_list'."
+- "Add the QListWidget to the QHBoxLayout."
+- "Call self.setCentralWidget(central_widget)."
+tdd_instructions:
+  tests_file: "tests/test_main_window.py"
+  assertions:
+  - "Assert that MainWindow centralWidget() is not None."
+  - "Assert that a QListWidget with object name 'step_list' exists inside MainWindow central widget."
+  mocking_guide:
+  - "Use window.findChild(QListWidget, 'step_list') to retrieve the list widget instance in tests."
+implementation_details:
+  files_to_modify:
+  - "src/ui/main_window.py"
+  api_signature: |
+    from PySide6.QtWidgets import QWidget, QHBoxLayout, QListWidget
+    # In MainWindow.__init__:
+    self.central_widget = QWidget()
+    self.setCentralWidget(self.central_widget)
+    self.main_layout = QHBoxLayout(self.central_widget)
+    self.step_list = QListWidget()
+    self.step_list.setObjectName("step_list")
+    self.main_layout.addWidget(self.step_list)
+  edge_cases:
+  - "Ensure layout sizes stretch properly so that QListWidget takes up the majority of the horizontal space."
+verification_command: "pytest tests/test_main_window.py"

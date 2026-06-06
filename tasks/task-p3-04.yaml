@@ -1,0 +1,37 @@
+id: "task-p3-04"
+title: "Implement copy_and_match clipboard text using pyperclip"
+phase: "Phase 3: \"Smart\" Triggers (SikuliX-inspired)"
+prerequisites: []
+requirements:
+- "Implement copy_and_match(pattern) inside src/engine/actions.py."
+- "Simulate Ctrl+A and Ctrl+C to copy current window content."
+- "Read copied text from clipboard via pyperclip."
+- "Apply regex pattern match, and return first captured group."
+- "Raise ValueError if regex doesn't match, and RuntimeError if clipboard is empty."
+step_by_step_instructions:
+- "In src/engine/actions.py, import pyperclip and re."
+- "Implement copy_and_match(pattern)."
+- "pyperclip.copy('') to clear clipboard."
+- "pyautogui.hotkey('ctrl', 'a') then pyautogui.hotkey('ctrl', 'c')."
+- "Wait up to 1.0 seconds for clipboard content to become non-empty."
+- "Get clipboard text. If still empty, raise RuntimeError."
+- "Run re.search(pattern, text). If no match, raise ValueError."
+- "Return matched group 1 (or group 0 if no groups defined)."
+tdd_instructions:
+  tests_file: "tests/test_actions.py"
+  assertions:
+  - "Assert copy_and_match extracts matching regex groups."
+  - "Assert copy_and_match raises ValueError if no match found."
+  - "Assert copy_and_match raises RuntimeError on empty clipboard."
+  mocking_guide:
+  - "Mock pyperclip.paste, pyautogui.hotkey to test regex parsing logic in isolation."
+implementation_details:
+  files_to_modify:
+  - "src/engine/actions.py"
+  api_signature: |
+    def copy_and_match(pattern: str) -> str:
+        # Copies focused screen text, matches regex, returns match group
+        pass
+  edge_cases:
+  - "Wait with a small polling sleep (0.05s) while checking for clipboard population to prevent race conditions."
+verification_command: "pytest tests/test_actions.py"

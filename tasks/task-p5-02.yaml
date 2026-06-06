@@ -1,0 +1,31 @@
+id: "task-p5-02"
+title: "Configure local fallback path for Tesseract binary"
+phase: "Phase 5: Packaging and Distribution"
+prerequisites:
+- "task-p3-02"
+requirements:
+- "In src/vision/ocr.py, detect if a local Tesseract binary is bundled (e.g. bin/tesseract/tesseract.exe)."
+- "If local binary exists, set pytesseract.pytesseract.tesseract_cmd to that path."
+- "If not found locally, look in standard system path 'C:\Program Files\Tesseract-OCR\tesseract.exe'."
+- "If still not found, raise a descriptive FileNotFoundError."
+step_by_step_instructions:
+- "In src/vision/ocr.py, write detection logic."
+- "Define check paths list: bin/tesseract/tesseract.exe, C:\Program Files\Tesseract-OCR\tesseract.exe."
+- "Iterate paths, if path exists (os.path.exists), assign it to pytesseract.pytesseract.tesseract_cmd and break."
+- "If no path exists, raise FileNotFoundError with setup details."
+tdd_instructions:
+  tests_file: "tests/test_ocr.py"
+  assertions:
+  - "Assert tesseract_cmd points to local binary if present."
+  - "Assert tesseract_cmd falls back to standard path."
+  - "Assert FileNotFoundError is raised if no binaries exist."
+  mocking_guide:
+  - "Mock os.path.exists and pytesseract variables to simulate different environment structures."
+implementation_details:
+  files_to_modify:
+  - "src/vision/ocr.py"
+  api_signature: |
+    # Detection sequence inside src/vision/ocr.py
+  edge_cases:
+  - "Handle path formatting differences on Windows (backslashes) vs Unix-like environments."
+verification_command: "pytest tests/test_ocr.py"

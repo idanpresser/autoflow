@@ -1,0 +1,35 @@
+id: "task-p1-04"
+title: "Implement profile serialization to JSON dict inside config.py"
+phase: "Phase 1: Core Foundation & UI Builder"
+prerequisites: []
+requirements:
+- "Define serialize_profile function in src/utils/config.py."
+- "Accept a profile dictionary and return a valid JSON string."
+- "Raise custom ValidationError if key fields (profile_name, hotkey, steps) are missing or type-mismatched."
+step_by_step_instructions:
+- "Create src/utils/config.py if it does not exist."
+- "Define custom class ValidationError inheriting from Exception."
+- "Define serialize_profile(profile_dict)."
+- "Implement checks: profile_name is non-empty string, hotkey is string, steps is a list."
+- "Use json.dumps() to serialize valid profile_dict to string."
+tdd_instructions:
+  tests_file: "tests/test_config.py"
+  assertions:
+  - "Assert serialize_profile returns a string matching json representation."
+  - "Assert raising ValidationError when profile_name is empty."
+  - "Assert raising ValidationError when steps is not a list."
+  mocking_guide:
+  - "No GUI or hardware mocks needed, pure python test."
+implementation_details:
+  files_to_modify:
+  - "src/utils/config.py"
+  api_signature: |
+    class ValidationError(Exception):
+        pass
+    
+    def serialize_profile(profile_dict: dict) -> str:
+        # returns JSON string
+        pass
+  edge_cases:
+  - "Handle unicode characters correctly in profile names using UTF-8."
+verification_command: "pytest tests/test_config.py"

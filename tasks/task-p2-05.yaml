@@ -1,0 +1,34 @@
+id: "task-p2-05"
+title: "Implement keystroke and type_text using pyautogui in src/engine/actions.py"
+phase: "Phase 2: The Execution Engine (Taskt-inspired)"
+prerequisites: []
+requirements:
+- "Ensure pyautogui.FAILSAFE is enabled (True)."
+- "Implement type_text(text) using pyautogui.write with standard safe interval (0.05s) to avoid UI drops."
+- "Implement send_keystroke(keys) accepting list of keys (e.g. ['ctrl', 'c']) and typing them as a hotkey."
+step_by_step_instructions:
+- "In src/engine/actions.py, import pyautogui."
+- "Set pyautogui.FAILSAFE = True."
+- "Implement type_text(text: str). Call pyautogui.write(text, interval=0.05)."
+- "Implement send_keystroke(keys: list). Call pyautogui.hotkey(*keys)."
+tdd_instructions:
+  tests_file: "tests/test_actions.py"
+  assertions:
+  - "Assert type_text triggers pyautogui.write with interval=0.05."
+  - "Assert send_keystroke triggers pyautogui.hotkey with correct arguments unpack."
+  mocking_guide:
+  - "Mock pyautogui module methods (write, hotkey) to assert correct invocation without firing physical keystrokes on tester's OS."
+implementation_details:
+  files_to_modify:
+  - "src/engine/actions.py"
+  api_signature: |
+    def type_text(text: str) -> None:
+        # safe-types text
+        pass
+    
+    def send_keystroke(keys: list) -> None:
+        # triggers hotkey press
+        pass
+  edge_cases:
+  - "Filter out empty keys list inside send_keystroke to avoid pyautogui errors."
+verification_command: "pytest tests/test_actions.py"

@@ -1,0 +1,36 @@
+id: "task-p2-04"
+title: "Implement focus_window using pygetwindow in src/engine/actions.py"
+phase: "Phase 2: The Execution Engine (Taskt-inspired)"
+prerequisites: []
+requirements:
+- "Create src/engine/actions.py."
+- "Implement focus_window(title_substring)."
+- "Use pygetwindow to find matching windows by title substring."
+- "Restore if minimized, then activate/focus window."
+- "Raise RuntimeError if no matching window is found."
+step_by_step_instructions:
+- "Create src/engine/actions.py."
+- "Import pygetwindow."
+- "Implement focus_window(title_substring)."
+- "Call pygetwindow.getWindowsWithTitle(title_substring)."
+- "If results list is empty, raise RuntimeError('Window not found')."
+- "Get the first matching window. If minimized, call win.restore()."
+- "Call win.activate() to bring it to focus."
+tdd_instructions:
+  tests_file: "tests/test_actions.py"
+  assertions:
+  - "Assert focus_window calls pygetwindow.getWindowsWithTitle."
+  - "Assert RuntimeError is raised when getWindowsWithTitle returns empty list."
+  - "Assert restore and activate are called on target window object."
+  mocking_guide:
+  - "Mock pygetwindow completely. Return mock window object representing minimized or normal states."
+implementation_details:
+  files_to_modify:
+  - "src/engine/actions.py"
+  api_signature: |
+    def focus_window(title_substring: str) -> None:
+        # Activates and focuses target window
+        pass
+  edge_cases:
+  - "Handle pygetwindow's PyGetWindowException if the window cannot be activated (e.g. permissions)."
+verification_command: "pytest tests/test_actions.py"

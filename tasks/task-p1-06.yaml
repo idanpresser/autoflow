@@ -1,0 +1,34 @@
+id: "task-p1-06"
+title: "Implement load_profile_from_file inside config.py"
+phase: "Phase 1: Core Foundation & UI Builder"
+prerequisites:
+- "task-p1-05"
+requirements:
+- "Define load_profile_from_file(file_path)."
+- "Reads JSON file from disk."
+- "Validates schema and parses to dictionary."
+- "Raises FileNotFoundError if file is missing, and ValidationError if file is malformed JSON or invalid schema."
+step_by_step_instructions:
+- "In src/utils/config.py, implement load_profile_from_file(file_path)."
+- "Open file using open() with utf-8 encoding."
+- "Load file contents using json.load()."
+- "Run validation checks on the loaded dictionary (same as serialize_profile)."
+- "Return the valid profile dictionary."
+tdd_instructions:
+  tests_file: "tests/test_config.py"
+  assertions:
+  - "Assert load_profile_from_file returns the exact profile dictionary saved."
+  - "Assert loading non-existent file raises FileNotFoundError."
+  - "Assert loading invalid JSON format raises ValidationError."
+  mocking_guide:
+  - "Use pytest tmp_path to create bad JSON files and mock profiles."
+implementation_details:
+  files_to_modify:
+  - "src/utils/config.py"
+  api_signature: |
+    def load_profile_from_file(file_path: str) -> dict:
+        # Load and returns profile dict
+        pass
+  edge_cases:
+  - "Handle empty files gracefully without crashing, raising ValidationError."
+verification_command: "pytest tests/test_config.py"

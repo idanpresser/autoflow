@@ -1,0 +1,39 @@
+id: "task-p1-03"
+title: "Create action addition buttons in the MainWindow UI"
+phase: "Phase 1: Core Foundation & UI Builder"
+prerequisites:
+- "task-p1-02"
+requirements:
+- "Must add a control panel panel (left side layout or toolbar) to MainWindow."
+- "Must include three QPushButton elements: 'Add Type Text' (btn_add_type), 'Add Press Key' (btn_add_key), and 'Add Wait' (btn_add_wait)."
+- "Clicking the buttons must append the respective action dictionaries to the step list model."
+step_by_step_instructions:
+- "In src/ui/main_window.py, create a left panel using a QVBoxLayout or QWidget."
+- "Instantiate three buttons and assign their object names: btn_add_type, btn_add_key, btn_add_wait."
+- "Define three slots in MainWindow: add_type_action, add_key_action, and add_wait_action."
+- "Connect the buttons' clicked signals to these slots."
+- "Inside slots, add a new item representing the step (e.g. string/dict) to step_list."
+tdd_instructions:
+  tests_file: "tests/test_main_window.py"
+  assertions:
+  - "Assert that btn_add_type, btn_add_key, and btn_add_wait are present in the UI layout."
+  - "Simulate clicking btn_add_type and assert that step_list count increases by 1."
+  - "Simulate clicking btn_add_key and assert that step_list count increases by 1."
+  mocking_guide:
+  - "Use QTest.mouseClick(button, Qt.LeftButton) from PySide6.QtTest module to simulate actual user clicks."
+implementation_details:
+  files_to_modify:
+  - "src/ui/main_window.py"
+  api_signature: |
+    def add_type_action(self):
+        # add step mock to list
+        pass
+    def add_key_action(self):
+        # add step mock to list
+        pass
+    def add_wait_action(self):
+        # add step mock to list
+        pass
+  edge_cases:
+  - "Verify steps are stored with unique configurations so that we distinguish type, key, and wait actions."
+verification_command: "pytest tests/test_main_window.py"

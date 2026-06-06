@@ -1,0 +1,33 @@
+id: "task-p1-05"
+title: "Implement save_profile_to_file inside config.py"
+phase: "Phase 1: Core Foundation & UI Builder"
+prerequisites:
+- "task-p1-04"
+requirements:
+- "Define save_profile_to_file(profile_dict, folder_path)."
+- "Creates directory folder_path automatically if missing."
+- "Writes serialized JSON output under folder_path/{profile_name}.json."
+step_by_step_instructions:
+- "In src/utils/config.py, import os and json."
+- "Implement save_profile_to_file(profile_dict, folder_path)."
+- "Validate and serialize the profile first using serialize_profile."
+- "Call os.makedirs(folder_path, exist_ok=True)."
+- "Construct file path using os.path.join(folder_path, f\"{profile_dict['profile_name']}.json\")."
+- "Write the JSON string to the constructed path with UTF-8 encoding."
+tdd_instructions:
+  tests_file: "tests/test_config.py"
+  assertions:
+  - "Assert that saving a profile creates a file with correct path."
+  - "Assert file contents match the serialized profile JSON."
+  mocking_guide:
+  - "Use pytest's tmp_path fixture to write files to a temporary sandbox directory."
+implementation_details:
+  files_to_modify:
+  - "src/utils/config.py"
+  api_signature: |
+    def save_profile_to_file(profile_dict: dict, folder_path: str) -> str:
+        # Saves profile and returns absolute file path
+        pass
+  edge_cases:
+  - "Clean up filenames from illegal OS characters (e.g. /, \, ?, *) to prevent path traversal."
+verification_command: "pytest tests/test_config.py"

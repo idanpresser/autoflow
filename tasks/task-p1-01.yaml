@@ -1,0 +1,38 @@
+id: "task-p1-01"
+title: "Initialize the PySide6 MainWindow structure"
+phase: "Phase 1: Core Foundation & UI Builder"
+prerequisites: []
+requirements:
+- "MainWindow must inherit from PySide6.QtWidgets.QMainWindow."
+- "Window title must be set to 'AutoFlow'."
+- "Initial window dimensions must be set to 800x600 pixels."
+- "The class must be defined in src/ui/main_window.py."
+- "Standard PySide6 event loop must be ready to execute it."
+step_by_step_instructions:
+- "Create the directory structure src/ui/ if it does not exist."
+- "Create src/ui/main_window.py with MainWindow inheriting from QMainWindow."
+- "Implement __init__ method calling super().__init__()."
+- "Call self.setWindowTitle('AutoFlow') and self.resize(800, 600) inside __init__."
+- "Create tests/test_main_window.py and write a pytest function to instantiate MainWindow using pytest-qt or basic QApplication setup."
+tdd_instructions:
+  tests_file: "tests/test_main_window.py"
+  assertions:
+  - "Assert that an instance of MainWindow is successfully created."
+  - "Assert that window.windowTitle() == 'AutoFlow'."
+  - "Assert that window.width() == 800 and window.height() == 600."
+  mocking_guide:
+  - "Ensure a QApplication is initialized before testing PySide6 widgets. You can use pytest-qt's qbot fixture or initialize QApplication manually."
+implementation_details:
+  files_to_modify:
+  - "src/ui/main_window.py"
+  api_signature: |
+    from PySide6.QtWidgets import QMainWindow
+    
+    class MainWindow(QMainWindow):
+        def __init__(self):
+            super().__init__()
+            self.setWindowTitle("AutoFlow")
+            self.resize(800, 600)
+  edge_cases:
+  - "Verify QApplication is closed gracefully after test runs to avoid process hanging."
+verification_command: "pytest tests/test_main_window.py"

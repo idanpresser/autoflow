@@ -1,0 +1,34 @@
+id: "task-p4-02"
+title: "Link global hotkeys to spawn and start WorkflowRunner"
+phase: "Phase 4: Global Hotkeys & OS Integration"
+prerequisites:
+- "task-p2-02"
+- "task-p4-01"
+requirements:
+- "Listen to global hotkeys defined in current profile."
+- "Spawn and run WorkflowRunner when hotkey is triggered."
+- "Use thread-safe PySide6 Signal/Slot communication to start the runner from main GUI thread."
+step_by_step_instructions:
+- "In main.py or main_window.py, create a QObject subclass (e.g. HotkeyManager) that manages hotkey bindings."
+- "Define a custom PySide6 Signal 'hotkey_triggered'."
+- "In the global hotkey callback, call hotkey_triggered.emit()."
+- "Connect hotkey_triggered signal to MainWindow slot 'start_workflow()'."
+- "Inside start_workflow(), construct and start WorkflowRunner."
+tdd_instructions:
+  tests_file: "tests/test_hotkeys.py"
+  assertions:
+  - "Assert that when the manager's keyboard callback fires, the hotkey_triggered signal is emitted."
+  - "Assert that start_workflow is called in response to signal."
+  mocking_guide:
+  - "Emit the signal manually or simulate callback execution in tests to verify runner starts."
+implementation_details:
+  files_to_modify:
+  - "src/utils/hotkeys.py"
+  - "main.py"
+  api_signature: |
+    # Setup HotkeyManager QObject with Signal
+    class HotkeyManager(QObject):
+        hotkey_triggered = Signal()
+  edge_cases:
+  - "Ensure that multiple concurrent hotkey events do not spawn multiple overlapping runners. Allow only one runner at a time."
+verification_command: "pytest tests/test_hotkeys.py"

@@ -1,0 +1,41 @@
+id: "task-p2-03"
+title: "Highlight MainWindow list items during execution"
+phase: "Phase 2: The Execution Engine (Taskt-inspired)"
+prerequisites:
+- "task-p1-03"
+- "task-p2-02"
+requirements:
+- "Link MainWindow UI step list with WorkflowRunner signals."
+- "Highlight currently executing step in list (e.g. bold or background color yellow)."
+- "Highlight completed steps in green."
+- "Highlight failed step in red upon error_occurred."
+step_by_step_instructions:
+- "In src/ui/main_window.py, import WorkflowRunner."
+- "Define slot methods: on_step_finished(index), on_workflow_completed(status), on_error_occurred(error_msg)."
+- "When starting workflow execution, instantiate WorkflowRunner with current steps."
+- "Connect the runner's signals to these slots."
+- "In on_step_finished(index), set previous item background to Green, current item to Yellow."
+- "In on_error_occurred(error_msg), set current row item background to Red, show warning message dialog."
+tdd_instructions:
+  tests_file: "tests/test_main_window.py"
+  assertions:
+  - "Assert that step_finished signal changes target row item background color to Green."
+  - "Assert that error_occurred changes row item background color to Red."
+  mocking_guide:
+  - "Mock WorkflowRunner signals or emit them manually to test the UI's slot responses without needing actual execution."
+implementation_details:
+  files_to_modify:
+  - "src/ui/main_window.py"
+  api_signature: |
+    def on_step_finished(self, index: int):
+        # Updates row colors
+        pass
+    def on_workflow_completed(self, status: str):
+        # Reset row highlights or show success dialog
+        pass
+    def on_error_occurred(self, error_msg: str):
+        # Set current item background color to red
+        pass
+  edge_cases:
+  - "Ensure row index boundaries are validated to prevent IndexError if index is out of bounds."
+verification_command: "pytest tests/test_main_window.py"

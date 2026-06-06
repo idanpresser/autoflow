@@ -1,0 +1,36 @@
+id: "task-p4-01"
+title: "Implement register_hotkey using keyboard module"
+phase: "Phase 4: Global Hotkeys & OS Integration"
+prerequisites: []
+requirements:
+- "Create src/utils/hotkeys.py."
+- "Implement register_global_hotkey(hotkey_str, callback)."
+- "Use the keyboard module to register callback."
+- "Implement unregister_all_hotkeys() to clean up registered hotkeys."
+step_by_step_instructions:
+- "Create src/utils/hotkeys.py."
+- "Import keyboard."
+- "Implement register_global_hotkey(hotkey_str, callback)."
+- "Call keyboard.add_hotkey(hotkey_str, callback)."
+- "Implement unregister_all_hotkeys() calling keyboard.unhook_all()."
+tdd_instructions:
+  tests_file: "tests/test_hotkeys.py"
+  assertions:
+  - "Assert register_global_hotkey invokes keyboard.add_hotkey with correct keys and callback."
+  - "Assert unregister_all_hotkeys invokes keyboard.unhook_all."
+  mocking_guide:
+  - "Mock keyboard module functions (add_hotkey, unhook_all) to avoid binding actual key hooks during tests."
+implementation_details:
+  files_to_modify:
+  - "src/utils/hotkeys.py"
+  api_signature: |
+    def register_global_hotkey(hotkey_str: str, callback: callable) -> None:
+        # registers global shortcut
+        pass
+    
+    def unregister_all_hotkeys() -> None:
+        # cleans up hooks
+        pass
+  edge_cases:
+  - "Handle ValueError raised by keyboard module if hotkey string format is invalid."
+verification_command: "pytest tests/test_hotkeys.py"

@@ -1,0 +1,40 @@
+id: "task-p2-02"
+title: "Implement step loop in WorkflowRunner run method"
+phase: "Phase 2: The Execution Engine (Taskt-inspired)"
+prerequisites:
+- "task-p2-01"
+requirements:
+- "Implement run() method to iterate sequentially over self.steps."
+- "Emit step_finished(index) after each step completes."
+- "Emit workflow_completed('Success') when all steps finish."
+- "Cooperatively cancel execution if stop() is called, setting _is_running to False."
+- "Emit error_occurred(str) if an exception occurs."
+step_by_step_instructions:
+- "In src/engine/runner.py, implement the run() method."
+- "Iterate through self.steps using enumerate()."
+- "Within loop, check self._is_running. If False, break immediately."
+- "Wrap execution logic in try-except block."
+- "After processing step (simulated for now), emit step_finished.emit(index)."
+- "Outside loop, if completed without errors and not aborted, emit workflow_completed.emit('Success')."
+- "Implement stop(self) setting self._is_running = False."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert that running WorkflowRunner with 3 mock steps emits step_finished 3 times."
+  - "Assert that calling runner.stop() during execution aborts early and does not emit final workflow_completed."
+  - "Assert that raising an exception inside a step emits error_occurred signal."
+  mocking_guide:
+  - "Use pytest-qt's qtbot to wait for signals: with qtbot.waitSignals([runner.step_finished, runner.workflow_completed]): runner.start()."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    def run(self):
+        # Iterates steps and emits progress signals
+        pass
+    
+    def stop(self):
+        self._is_running = False
+  edge_cases:
+  - "Handle thread safety when stop() is called from GUI thread while run() executes in worker thread."
+verification_command: "pytest tests/test_runner.py"

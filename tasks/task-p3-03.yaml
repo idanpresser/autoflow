@@ -1,0 +1,39 @@
+id: "task-p3-03"
+title: "Implement wait_for_text polling trigger in runner.py"
+phase: "Phase 3: \"Smart\" Triggers (SikuliX-inspired)"
+prerequisites:
+- "task-p2-02"
+- "task-p3-02"
+requirements:
+- "In WorkflowRunner, add wait_for_ocr(target_text, timeout) method."
+- "Capture screen and extract text every 500ms (poll)."
+- "Exit loop and succeed if target_text substring is found in screen text."
+- "Respect cancellation flag (_is_running) to terminate loop immediately if runner is stopped."
+- "Raise TimeoutError if timeout is exceeded."
+step_by_step_instructions:
+- "In src/engine/runner.py, import capture_screen and extract_text."
+- "Implement wait_for_ocr(self, target_text, timeout)."
+- "Calculate start_time. Loop while elapsed time < timeout."
+- "Check if self._is_running is False. If so, exit."
+- "Capture screen, run extract_text."
+- "If target_text is in extracted text, return."
+- "Sleep 500ms using time.sleep(0.5)."
+- "Raise TimeoutError if loop exits without finding the target text."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert wait_for_ocr exits successfully when text appears."
+  - "Assert wait_for_ocr raises TimeoutError after timeout expires."
+  - "Assert loop stops executing if _is_running is set to False."
+  mocking_guide:
+  - "Mock capture_screen and extract_text to return different texts sequentially (first empty, then target)."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    def wait_for_ocr(self, target_text: str, timeout: float) -> None:
+        # Poll screen OCR every 0.5s until found or timeout
+        pass
+  edge_cases:
+  - "Ensure floating point precision is handled correctly when checking elapsed time."
+verification_command: "pytest tests/test_runner.py"

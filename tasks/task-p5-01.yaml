@@ -1,0 +1,28 @@
+id: "task-p5-01"
+title: "Create PyInstaller spec file autoflow.spec"
+phase: "Phase 5: Packaging and Distribution"
+prerequisites: []
+requirements:
+- "Create autoflow.spec in the workspace root."
+- "Configure spec file to bundle PySide6, cv2, pytesseract, mss, keyboard, pyperclip."
+- "Set console=False in EXE parameters to hide the command prompt window."
+step_by_step_instructions:
+- "Create autoflow.spec file."
+- "Add analysis, collecting binaries, datas, and hidden imports for external libs."
+- "Under EXE, set console=False and set appropriate application icon config."
+- "Ensure packaging output goes to dist/ directory."
+tdd_instructions:
+  tests_file: "tests/test_packaging.py"
+  assertions:
+  - "Assert that autoflow.spec exists in the root directory."
+  - "Assert that console=False is specified in the spec file text."
+  mocking_guide:
+  - "Simple file existence and regex content tests."
+implementation_details:
+  files_to_modify:
+  - "autoflow.spec"
+  api_signature: |
+    # Pure PyInstaller spec file content structure
+  edge_cases:
+  - "Ensure hidden imports are declared for dependencies loaded dynamically (such as cv2 and keyboard hooks)."
+verification_command: "pytest tests/test_packaging.py"

@@ -1,0 +1,36 @@
+id: "task-p4-03"
+title: "Implement QSystemTrayIcon and minimize behavior"
+phase: "Phase 4: Global Hotkeys & OS Integration"
+prerequisites:
+- "task-p1-01"
+requirements:
+- "Create src/ui/tray_icon.py."
+- "Create SystemTrayIcon subclassing QSystemTrayIcon."
+- "System tray must include menu options: 'Restore' and 'Exit'."
+- "Override MainWindow closeEvent to minimize/hide main window to system tray instead of closing application."
+step_by_step_instructions:
+- "Create src/ui/tray_icon.py."
+- "Implement SystemTrayIcon inheriting from QSystemTrayIcon."
+- "Add a QMenu containing QAction for Restore (shows MainWindow) and Exit (quits QApplication)."
+- "In src/ui/main_window.py, override closeEvent(self, event)."
+- "Inside closeEvent, call event.ignore() and self.hide(). Show tray notification."
+tdd_instructions:
+  tests_file: "tests/test_tray_icon.py"
+  assertions:
+  - "Assert tray icon is initialized with correct actions."
+  - "Assert close event on MainWindow hides the window instead of destroying it."
+  mocking_guide:
+  - "Mock QSystemTrayIcon.show and check calls. Use pytest-qt to simulate closeEvent."
+implementation_details:
+  files_to_modify:
+  - "src/ui/tray_icon.py"
+  - "src/ui/main_window.py"
+  api_signature: |
+    from PySide6.QtWidgets import QSystemTrayIcon
+    
+    class SystemTrayIcon(QSystemTrayIcon):
+        # Tray icon and context menu setup
+        pass
+  edge_cases:
+  - "Double check that the application exit action in tray menu calls QCoreApplication.quit() directly, bypassing the overridden closeEvent."
+verification_command: "pytest tests/test_tray_icon.py"

@@ -1,0 +1,41 @@
+id: "task-p2-01"
+title: "Create WorkflowRunner QThread skeleton"
+phase: "Phase 2: The Execution Engine (Taskt-inspired)"
+prerequisites: []
+requirements:
+- "Create src/engine/runner.py containing WorkflowRunner."
+- "WorkflowRunner must inherit from PySide6.QtCore.QThread."
+- "Must define signals: step_finished(int), workflow_completed(str), error_occurred(str)."
+- "Must initialize with a list of steps."
+step_by_step_instructions:
+- "Create the directory src/engine/."
+- "Create src/engine/runner.py."
+- "Import QThread and Signal from PySide6.QtCore."
+- "Define class WorkflowRunner subclassing QThread."
+- "Declare step_finished as Signal(int), workflow_completed as Signal(str), and error_occurred as Signal(str)."
+- "Implement __init__(self, steps) taking the task steps list."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert that WorkflowRunner is a subclass of QThread."
+  - "Assert that signals step_finished, workflow_completed, and error_occurred exist."
+  mocking_guide:
+  - "Verify signal signatures using pytest. No external device mocks needed."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    from PySide6.QtCore import QThread, Signal
+    
+    class WorkflowRunner(QThread):
+        step_finished = Signal(int)
+        workflow_completed = Signal(str)
+        error_occurred = Signal(str)
+    
+        def __init__(self, steps: list):
+            super().__init__()
+            self.steps = steps
+            self._is_running = True
+  edge_cases:
+  - "Ensure _is_running boolean is set to True upon initialization."
+verification_command: "pytest tests/test_runner.py"
