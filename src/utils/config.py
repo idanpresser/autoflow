@@ -49,3 +49,25 @@ def save_profile_to_file(profile_dict, folder_path):
         return file_path
     except Exception as e:
         raise IOError(f"Failed to write profile to file: {e}")
+
+def load_profile_from_file(file_path):
+    """
+    Loads and validates a profile from the specified JSON file path.
+    Raises FileNotFoundError if the file is missing, and ValidationError
+    if the JSON is malformed or missing required keys.
+    """
+    if not os.path.exists(file_path):
+        raise FileNotFoundError(f"Profile file not found: {file_path}")
+        
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            profile_dict = json.load(f)
+    except json.JSONDecodeError as e:
+        raise ValidationError(f"Invalid JSON format: {e}")
+    except Exception as e:
+        raise IOError(f"Failed to read file: {e}")
+        
+    # Run serialization validation (will raise ValidationError if validation fails)
+    serialize_profile(profile_dict)
+    
+    return profile_dict

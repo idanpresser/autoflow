@@ -1,7 +1,7 @@
 import pytest
 import json
 import os
-from src.utils.config import serialize_profile, save_profile_to_file, ValidationError
+from src.utils.config import serialize_profile, save_profile_to_file, load_profile_from_file, ValidationError
 
 def test_serialize_profile_success():
     profile = {
@@ -83,3 +83,43 @@ def test_save_profile_to_file_validation_error(tmp_path):
         
     # Verify no files were created in tmp_path
     assert len(list(tmp_path.iterdir())) == 0
+
+def test_load_profile_from_file_success(tmp_path):
+    profile = {
+        "profile_name": "Loaded Profile",
+        "hotkey": "f10",
+        "steps": [{"type": "keystroke", "keys": ["enter"]}]
+    }
+    file_path = tmp_path / "Loaded Profile.json"
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(profile, f)
+        
+    loaded = load_profile_from_file(file_path)
+    assert loaded["profile_name"] == "Loaded Profile"
+    assert loaded["hotkey"] == "f10"
+    assert len(loaded["steps"]) == 1
+
+def test_load_profile_from_file_not_found():
+    with pytest.raises(FileNotFoundError):
+        load_profile_from_file("non_existent_file.json")
+
+def test_load_profile_from_file_validation_error(tmp_path):
+    # Missing hotkey
+    profile = {
+        "profile_name": "Bad Profile",
+        "steps": []
+    }
+    file_path = tmp_path / "bad.json"
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(profile, f)
+        
+    with pytest.raises(ValidationError):
+        load_profile_from_file(file_path)
+
+def test_load_profile_from_file_malformed_json(tmp_path):
+    file_path = tmp_path / "malformed.json"
+    with open(file_path, 'w', encoding='utf-8') as f:
+        f.write("{invalid json")
+        
+    with pytest.raises(ValidationError):
+        load_profile_from_file(file_path)
