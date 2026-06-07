@@ -207,7 +207,7 @@ tasks:
   - tests/test_ocr.py
 - id: task-refactor-p1-02
   description: Inject VisionProvider into WorkflowRunner constructor.
-  status: pending
+  status: completed
   branch: tdd-task-refactor-p1-02
   worktree_path: .worktrees/task-task-refactor-p1-02
   inputs:
