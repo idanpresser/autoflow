@@ -1,4 +1,4 @@
-current_task_id: null
+current_task_id: task-mistral-ocr-01
 target_branch: main
 tasks:
 - id: task-p1-01
@@ -287,7 +287,7 @@ tasks:
   - tests/test_runner.py
 - id: task-mistral-ocr-01
   description: Add Mistral OCR configuration template and gitignore protection.
-  status: pending
+  status: in_progress
   branch: tdd-task-mistral-ocr-01
   worktree_path: .worktrees/task-task-mistral-ocr-01
   inputs: []

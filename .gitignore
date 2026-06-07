@@ -28,3 +28,10 @@ desktop.ini
 dist/
 build/
 *.egg-info/
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+

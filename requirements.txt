@@ -8,6 +8,9 @@ pygetwindow>=0.0.9
 pyperclip>=1.8.2
 pytesseract>=0.3.10
 keyboard>=0.13.5
+mistralai>=1.0.0
+python-dotenv>=1.0.0
+
 
 # Development & Static Analysis
 pytest>=8.0.0
