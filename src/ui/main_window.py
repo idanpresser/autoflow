@@ -2,8 +2,13 @@ from PySide6.QtWidgets import (
     QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
     QListWidget, QPushButton, QInputDialog, QListWidgetItem
 )
-from PySide6.QtCore import Qt
+from PySide6.QtCore import Qt, QObject, Signal, Slot
 from PySide6.QtGui import QColor
+from src.utils.hotkeys import register_hotkey
+from src.engine.runner import WorkflowRunner
+
+class HotkeyBridge(QObject):
+    hotkey_triggered = Signal()
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -70,4 +75,34 @@ class MainWindow(QMainWindow):
         if 0 <= index < self.step_list.count():
             item = self.step_list.item(index)
             item.setBackground(QColor("#2e7d32"))
+
+    def setup_hotkey(self, hotkey_str):
+        """
+        Sets up the hotkey using HotkeyBridge for thread-safe cross-thread signal handling.
+        """
+        self.hotkey_bridge = HotkeyBridge()
+        self.hotkey_bridge.hotkey_triggered.connect(self.start_current_workflow)
+        
+        def callback():
+            self.hotkey_bridge.hotkey_triggered.emit()
+            
+        register_hotkey(hotkey_str, callback)
+
+    def start_current_workflow(self):
+        """
+        Resets step list item backgrounds and spawns the runner thread.
+        """
+        steps = []
+        for i in range(self.step_list.count()):
+            item = self.step_list.item(i)
+            steps.append(item.data(Qt.UserRole))
+            
+        # Reset colors
+        for i in range(self.step_list.count()):
+            self.step_list.item(i).setBackground(Qt.NoBrush)
+            
+        self.runner = WorkflowRunner(steps)
+        self.runner.step_finished.connect(self.on_step_finished)
+        self.runner.start()
+
 
