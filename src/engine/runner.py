@@ -6,6 +6,9 @@ from PySide6.QtCore import QThread, Signal
 from src.vision.ocr import VisionProvider, TesseractVisionProvider
 
 
+DEFAULT_OCR_POLL_INTERVAL = 0.5
+
+
 class WorkflowRunner(QThread):
     step_finished = Signal(int)
     workflow_completed = Signal(str)
@@ -43,7 +46,7 @@ class WorkflowRunner(QThread):
             if target in text:
                 return
 
-            time.sleep(0.5)
+            time.sleep(DEFAULT_OCR_POLL_INTERVAL)
 
         raise TimeoutError(f"Timeout waiting for text '{target}'")
 

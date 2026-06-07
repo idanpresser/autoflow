@@ -53,3 +53,14 @@ def test_copy_and_match_no_match() -> None:
 
         result = copy_and_match(r"ErrorCode:\s*(\d+)")
         assert result is None
+
+
+def test_extracted_constants() -> None:
+    from src.engine.actions import DEFAULT_TYPING_INTERVAL
+    from src.engine.runner import DEFAULT_OCR_POLL_INTERVAL
+    from src.ui.main_window import HIGHLIGHT_SUCCESS_COLOR
+
+    assert DEFAULT_TYPING_INTERVAL == 0.05
+    assert DEFAULT_OCR_POLL_INTERVAL == 0.5
+    assert HIGHLIGHT_SUCCESS_COLOR == "#2e7d32"
+

@@ -22,6 +22,9 @@ class HotkeyBridge(QObject):
     hotkey_triggered = Signal()
 
 
+HIGHLIGHT_SUCCESS_COLOR = "#2e7d32"
+
+
 class MainWindow(QMainWindow):
     def __init__(
         self,
@@ -101,7 +104,7 @@ class MainWindow(QMainWindow):
     def on_step_finished(self, index: int) -> None:
         if 0 <= index < self.step_list.count():
             item = self.step_list.item(index)
-            item.setBackground(QColor("#2e7d32"))
+            item.setBackground(QColor(HIGHLIGHT_SUCCESS_COLOR))
 
     def setup_hotkey(self, hotkey_str: str) -> None:
         """

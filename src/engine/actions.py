@@ -27,11 +27,14 @@ def focus_window(title: str) -> None:
             raise RuntimeError(f"Failed to focus window '{title}': {e}") from e
 
 
+DEFAULT_TYPING_INTERVAL = 0.05
+
+
 def type_text(text: str) -> None:
     """
     Types the specified text using pyautogui with a small safe interval.
     """
-    pyautogui.write(text, interval=0.05)
+    pyautogui.write(text, interval=DEFAULT_TYPING_INTERVAL)
 
 
 def send_keystroke(keys: list[str]) -> None:
