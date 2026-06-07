@@ -29,3 +29,17 @@ def test_send_keystroke():
         send_keystroke(["ctrl", "c"])
         mock_hotkey.assert_called_once_with("ctrl", "c")
 
+def test_copy_and_match():
+    with patch("pyperclip.paste", return_value="ErrorCode: 404 Not Found") as mock_paste:
+        from src.engine.actions import copy_and_match
+        result = copy_and_match(r"ErrorCode:\s*(\d+)")
+        assert result == "404"
+        mock_paste.assert_called_once()
+
+def test_copy_and_match_no_match():
+    with patch("pyperclip.paste", return_value="Success") as mock_paste:
+        from src.engine.actions import copy_and_match
+        result = copy_and_match(r"ErrorCode:\s*(\d+)")
+        assert result is None
+
+

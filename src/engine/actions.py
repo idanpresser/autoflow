@@ -37,3 +37,20 @@ def send_keystroke(keys):
     """
     pyautogui.hotkey(*keys)
 
+def copy_and_match(pattern):
+    """
+    Gets clipboard text via pyperclip.paste(), applies re.search(pattern, text),
+    and returns the first captured group (or the full match if no groups).
+    Returns None if no match is found.
+    """
+    import re
+    import pyperclip
+    text = pyperclip.paste()
+    match = re.search(pattern, text)
+    if not match:
+        return None
+    if match.groups():
+        return match.group(1)
+    return match.group(0)
+
+
