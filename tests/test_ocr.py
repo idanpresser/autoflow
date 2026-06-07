@@ -4,11 +4,23 @@ from src.vision.ocr import capture_screen
 
 
 def test_capture_screen() -> None:
-    img = capture_screen()
-    assert img is not None
-    assert isinstance(img, np.ndarray)
-    assert len(img.shape) == 3
-    assert img.shape[2] in (3, 4)
+    from unittest.mock import MagicMock, patch
+
+    mock_img = MagicMock()
+    mock_sct = MagicMock()
+    mock_sct.__enter__.return_value = mock_sct
+    mock_sct.monitors = [{}, {"left": 0, "top": 0, "width": 100, "height": 100}]
+    mock_sct.grab.return_value = mock_img
+
+    with patch("mss.MSS", return_value=mock_sct) as mock_mss, \
+         patch("numpy.array", return_value=np.zeros((100, 100, 3), dtype=np.uint8)) as mock_arr:
+        img = capture_screen()
+        assert img is not None
+        assert isinstance(img, np.ndarray)
+        mock_mss.assert_called_once()
+        mock_sct.grab.assert_called_once_with(mock_sct.monitors[1])
+        mock_arr.assert_called_once_with(mock_img)
+
 
 
 def test_extract_text() -> None:

@@ -104,9 +104,9 @@ class WorkflowRunner(QThread):
             send_keystroke(keys)
 
         elif step_type == "focus_window":
-            target = step.get("target", "")
+            target = step.get("target") or step.get("title", "")
             if not target:
-                raise ValueError("focus_window step missing 'target' field")
+                raise ValueError("focus_window step missing 'target' or 'title' field")
             focus_window(target)
 
         elif step_type == "wait":
