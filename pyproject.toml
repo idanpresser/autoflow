@@ -2,7 +2,34 @@
 name = "autoflow"
 version = "0.1.0"
 description = "AutoFlow"
-dependencies = []
+dependencies = [
+    "pyside6",
+    "pyautogui",
+    "pytesseract",
+    "opencv-python",
+    "mss",
+    "keyboard",
+    "pyperclip",
+    "pygetwindow",
+    "python-dotenv",
+    "Pillow",
+    "numpy",
+    "mistralai",
+]
+
+[project.scripts]
+autoflow = "main:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "ruff",
+    "mypy",
+]
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
 
 [tool.ruff]
 line-length = 100

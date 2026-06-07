@@ -12,6 +12,11 @@ class StepType(StrEnum):
     TYPE_TEXT = "type_text"
     KEYSTROKE = "keystroke"
     WAIT_FOR_TEXT = "wait_for_text"
+    FOCUS_WINDOW = "focus_window"
+    WAIT = "wait"
+    WAIT_FOR_IMAGE = "wait_for_image"
+    COPY_PARSE = "copy_parse"
+    RUN_COMMAND = "run_command"
 
 
 def serialize_profile(profile_dict: dict[str, Any]) -> str:
