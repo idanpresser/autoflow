@@ -241,7 +241,7 @@ tasks:
   - tests/test_config.py
 - id: task-refactor-p2-02
   description: Extract magic interval durations and hex colors into constants.
-  status: pending
+  status: completed
   branch: tdd-task-refactor-p2-02
   worktree_path: .worktrees/task-task-refactor-p2-02
   inputs:
