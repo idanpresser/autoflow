@@ -255,7 +255,7 @@ tasks:
   - tests/test_actions.py
 - id: task-refactor-p3-01
   description: Protect _is_running flag in WorkflowRunner using a thread-safe primitive.
-  status: pending
+  status: completed
   branch: tdd-task-refactor-p3-01
   worktree_path: .worktrees/task-task-refactor-p3-01
   inputs:
