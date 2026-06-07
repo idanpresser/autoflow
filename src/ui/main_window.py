@@ -4,15 +4,19 @@ from typing import Any
 from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QCloseEvent, QColor
 from PySide6.QtWidgets import (
+    QComboBox,
     QHBoxLayout,
     QInputDialog,
+    QLabel,
     QListWidget,
     QListWidgetItem,
     QMainWindow,
+    QMessageBox,
     QPushButton,
     QVBoxLayout,
     QWidget,
 )
+
 
 from src.engine.runner import WorkflowRunner
 from src.utils.config import StepType
@@ -44,8 +48,30 @@ class MainWindow(QMainWindow):
         central_widget = QWidget(self)
         main_layout = QVBoxLayout(central_widget)
 
+        # OCR Engine selection panel
+        ocr_layout = QHBoxLayout()
+        ocr_label = QLabel("OCR Engine:", central_widget)
+        ocr_layout.addWidget(ocr_label)
+        
+        self.ocr_combo = QComboBox(central_widget)
+        self.ocr_combo.setObjectName("ocr_combo")
+        self.ocr_combo.addItem("Tesseract (Local)")
+        self.ocr_combo.addItem("Mistral (Cloud)")
+        
+        import os
+        default_provider = os.getenv("OCR_PROVIDER", "tesseract").lower().strip()
+        if default_provider == "mistral":
+            self.ocr_combo.setCurrentIndex(1)
+        else:
+            self.ocr_combo.setCurrentIndex(0)
+            
+        ocr_layout.addWidget(self.ocr_combo)
+        ocr_layout.addStretch()
+        main_layout.addLayout(ocr_layout)
+
         # Buttons panel (horizontal layout)
         buttons_layout = QHBoxLayout()
+
 
         self.btn_add_type = QPushButton("Add Type Text", central_widget)
         self.btn_add_type.setObjectName("btn_add_type_text")
@@ -123,6 +149,8 @@ class MainWindow(QMainWindow):
         """
         Resets step list item backgrounds and spawns the runner thread.
         """
+        from src.vision.ocr import TesseractVisionProvider, MistralVisionProvider
+
         steps = []
         for i in range(self.step_list.count()):
             item = self.step_list.item(i)
@@ -132,9 +160,21 @@ class MainWindow(QMainWindow):
         for i in range(self.step_list.count()):
             self.step_list.item(i).setBackground(Qt.BrushStyle.NoBrush)
 
-        self.runner = self._runner_factory(steps)
+        # Resolve selected OCR provider from combobox
+        selected_text = self.ocr_combo.currentText()
+        if "Mistral" in selected_text:
+            try:
+                vision_provider = MistralVisionProvider()
+            except ValueError as e:
+                QMessageBox.warning(self, "OCR Configuration Error", str(e))
+                return
+        else:
+            vision_provider = TesseractVisionProvider()
+
+        self.runner = self._runner_factory(steps, vision_provider=vision_provider)
         self.runner.step_finished.connect(self.on_step_finished)
         self.runner.start()
+
 
     def closeEvent(self, event: QCloseEvent) -> None:  # noqa: N802
         """

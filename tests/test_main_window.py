@@ -127,3 +127,61 @@ def test_main_window_dependency_injection(qapp: QApplication) -> None:
 
     mock_runner_factory.assert_called_once()
 
+
+def test_main_window_ocr_selection(qapp: QApplication) -> None:
+    import os
+    from unittest.mock import MagicMock, patch
+    from PySide6.QtWidgets import QComboBox, QMessageBox
+    from src.vision.ocr import TesseractVisionProvider, MistralVisionProvider
+
+    # Test default pre-selection with tesseract env
+    with patch.dict(os.environ, {"OCR_PROVIDER": "tesseract"}):
+        window = MainWindow()
+        combo = window.findChild(QComboBox, "ocr_combo")
+        assert combo is not None
+        assert combo.currentIndex() == 0  # Tesseract
+
+    # Test default pre-selection with mistral env
+    with patch.dict(os.environ, {"OCR_PROVIDER": "mistral"}):
+        window = MainWindow()
+        combo = window.findChild(QComboBox, "ocr_combo")
+        assert combo is not None
+        assert combo.currentIndex() == 1  # Mistral
+
+    # Test running with Tesseract selected
+    mock_runner_factory = MagicMock()
+    window = MainWindow(runner_factory=mock_runner_factory)
+    combo = window.findChild(QComboBox, "ocr_combo")
+    combo.setCurrentIndex(0)  # Tesseract
+    window.start_current_workflow()
+    mock_runner_factory.assert_called_once()
+    kwargs = mock_runner_factory.call_args[1]
+    assert isinstance(kwargs["vision_provider"], TesseractVisionProvider)
+
+    # Test running with Mistral selected (without API key - raises warning)
+    mock_runner_factory.reset_mock()
+    with patch.dict(os.environ, {}):
+        if "MISTRAL_API_KEY" in os.environ:
+            del os.environ["MISTRAL_API_KEY"]
+        window = MainWindow(runner_factory=mock_runner_factory)
+        combo = window.findChild(QComboBox, "ocr_combo")
+        combo.setCurrentIndex(1)  # Mistral
+        
+        with patch.object(QMessageBox, "warning") as mock_warning:
+            window.start_current_workflow()
+            mock_warning.assert_called_once()
+            # Runner factory should NOT have been called due to configuration error
+            mock_runner_factory.assert_not_called()
+
+    # Test running with Mistral selected (with API key - succeeds)
+    mock_runner_factory.reset_mock()
+    with patch.dict(os.environ, {"MISTRAL_API_KEY": "dummy_key"}):
+        window = MainWindow(runner_factory=mock_runner_factory)
+        combo = window.findChild(QComboBox, "ocr_combo")
+        combo.setCurrentIndex(1)  # Mistral
+        window.start_current_workflow()
+        mock_runner_factory.assert_called_once()
+        kwargs = mock_runner_factory.call_args[1]
+        assert isinstance(kwargs["vision_provider"], MistralVisionProvider)
+
+
