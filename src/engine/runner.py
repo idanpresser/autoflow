@@ -31,15 +31,18 @@ class WorkflowRunner(QThread):
         return self._is_running
 
     def run(self) -> None:
-        for index, _step in enumerate(self.steps):
-            if not self.is_running():
-                break
+        try:
+            for index, _step in enumerate(self.steps):
+                if not self.is_running():
+                    break
 
-            # Emitting finished signal for the step
-            self.step_finished.emit(index)
+                # Emitting finished signal for the step
+                self.step_finished.emit(index)
 
-        if self.is_running():
-            self.workflow_completed.emit("Success")
+            if self.is_running():
+                self.workflow_completed.emit("Success")
+        except Exception as e:
+            self.error_occurred.emit(str(e))
 
     def wait_for_ocr(self, target: str, timeout: float) -> None:
         """

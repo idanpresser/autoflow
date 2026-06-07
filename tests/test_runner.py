@@ -158,4 +158,31 @@ def test_workflow_runner_steps_deep_copy() -> None:
     assert runner.steps == [{"type": "type_text", "text": "hello"}]
 
 
+def test_workflow_runner_global_exception_handling() -> None:
+    from typing import Any
+    class FailingSteps:
+        def __init__(self) -> None:
+            pass
+        def __iter__(self) -> Any:
+            raise RuntimeError("Iteration failed")
+
+    # Pass the failing steps but bypass the deepcopy inside __init__ using mock
+    from unittest.mock import patch
+    with patch("copy.deepcopy", return_value=FailingSteps()):
+        runner = WorkflowRunner([])
+
+    errors: list[str] = []
+    completed: list[str] = []
+
+    runner.error_occurred.connect(errors.append)
+    runner.workflow_completed.connect(completed.append)
+
+    runner.run()
+
+    assert len(errors) == 1
+    assert "Iteration failed" in errors[0]
+    assert len(completed) == 0
+
+
+
 
