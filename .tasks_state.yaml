@@ -1,4 +1,4 @@
-current_task_id: task-mistral-ocr-02
+current_task_id: null
 target_branch: main
 tasks:
 - id: task-p1-01
@@ -299,7 +299,7 @@ tasks:
   - conftest.py
 - id: task-mistral-ocr-02
   description: Implement MistralVisionProvider and factory function in ocr.py.
-  status: in_progress
+  status: completed
   branch: tdd-task-mistral-ocr-02
   worktree_path: .worktrees/task-task-mistral-ocr-02
   inputs:
