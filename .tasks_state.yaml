@@ -1,4 +1,4 @@
-current_task_id: null
+current_task_id: task-mistral-ocr-03
 target_branch: main
 tasks:
 - id: task-p1-01
@@ -310,7 +310,7 @@ tasks:
   - tests/test_ocr.py
 - id: task-mistral-ocr-03
   description: Integrate OCR provider selection in MainWindow UI.
-  status: pending
+  status: in_progress
   branch: tdd-task-mistral-ocr-03
   worktree_path: .worktrees/task-task-mistral-ocr-03
   inputs:
