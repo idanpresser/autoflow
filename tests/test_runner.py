@@ -145,4 +145,17 @@ def test_workflow_runner_thread_safe_stop() -> None:
     assert finished_indices == []
 
 
+def test_workflow_runner_steps_deep_copy() -> None:
+    steps = [{"type": "type_text", "text": "hello"}]
+    runner = WorkflowRunner(steps)
+
+    # Mutate the original steps list and dictionary
+    steps[0]["text"] = "mutated"
+    steps.append({"type": "keystroke", "keys": ["enter"]})
+
+    # Assert that the runner's steps list remains unchanged
+    assert runner.steps != steps
+    assert runner.steps == [{"type": "type_text", "text": "hello"}]
+
+
 

@@ -16,7 +16,8 @@ class WorkflowRunner(QThread):
 
     def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
         super().__init__()
-        self.steps = steps
+        import copy
+        self.steps = copy.deepcopy(steps)
         self._mutex = QMutex()
         self._is_running = True
         self.vision_provider = vision_provider if vision_provider is not None else TesseractVisionProvider()
