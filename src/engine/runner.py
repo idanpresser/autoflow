@@ -3,7 +3,7 @@ from typing import Any
 
 from PySide6.QtCore import QMutex, QMutexLocker, QThread, Signal
 
-from src.vision.ocr import TesseractVisionProvider, VisionProvider
+from src.vision.ocr import VisionProvider, get_vision_provider
 
 DEFAULT_OCR_POLL_INTERVAL = 0.5
 
@@ -27,8 +27,9 @@ class WorkflowRunner(QThread):
         self.vision_provider = (
             vision_provider
             if vision_provider is not None
-            else TesseractVisionProvider()
+            else get_vision_provider()
         )
+
 
     def stop(self) -> None:
         with QMutexLocker(self._mutex):
