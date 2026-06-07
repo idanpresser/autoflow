@@ -14,6 +14,7 @@ from PySide6.QtWidgets import (
 )
 
 from src.engine.runner import WorkflowRunner
+from src.utils.config import StepType
 from src.utils.hotkeys import register_hotkey
 
 
@@ -70,7 +71,7 @@ class MainWindow(QMainWindow):
         text, ok = QInputDialog.getText(self, "Add Type Text", "Enter text to type:")
         if ok and text:
             item = QListWidgetItem(f"Type Text: {text}", self.step_list)
-            item.setData(Qt.ItemDataRole.UserRole, {"type": "type_text", "text": text})
+            item.setData(Qt.ItemDataRole.UserRole, {"type": StepType.TYPE_TEXT, "text": text})
             self.step_list.addItem(item)
 
     def on_add_press_key(self) -> None:
@@ -78,7 +79,7 @@ class MainWindow(QMainWindow):
         if ok and keys_str:
             keys = [k.strip() for k in keys_str.split("+") if k.strip()]
             item = QListWidgetItem(f"Press Key: {keys_str}", self.step_list)
-            item.setData(Qt.ItemDataRole.UserRole, {"type": "keystroke", "keys": keys})
+            item.setData(Qt.ItemDataRole.UserRole, {"type": StepType.KEYSTROKE, "keys": keys})
             self.step_list.addItem(item)
 
     def on_add_wait(self) -> None:
@@ -93,7 +94,7 @@ class MainWindow(QMainWindow):
                 item = QListWidgetItem(f"Wait for Text: {text} ({timeout}s)", self.step_list)
                 item.setData(
                     Qt.ItemDataRole.UserRole,
-                    {"type": "wait_for_text", "text": text, "timeout_sec": timeout},
+                    {"type": StepType.WAIT_FOR_TEXT, "text": text, "timeout_sec": timeout},
                 )
                 self.step_list.addItem(item)
 

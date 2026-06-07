@@ -118,3 +118,32 @@ def test_load_profile_from_file_malformed_json(tmp_path: Path) -> None:
 
     with pytest.raises(ValidationError):
         load_profile_from_file(file_path)
+
+
+def test_step_type_enum() -> None:
+    from src.utils.config import StepType, serialize_profile
+    import pytest
+
+    # Verify Enum values
+    assert StepType.TYPE_TEXT == "type_text"
+    assert StepType.KEYSTROKE == "keystroke"
+    assert StepType.WAIT_FOR_TEXT == "wait_for_text"
+
+    # Verify validation works with Enum or string
+    profile_enum = {
+        "profile_name": "Test Enum Profile",
+        "hotkey": "f1",
+        "steps": [{"type": StepType.TYPE_TEXT, "text": "hello"}]
+    }
+    # Should serialize without error
+    assert serialize_profile(profile_enum) is not None
+
+    # Verify invalid step type fails validation
+    profile_invalid = {
+        "profile_name": "Invalid Type Profile",
+        "hotkey": "f1",
+        "steps": [{"type": "invalid_type", "text": "hello"}]
+    }
+    with pytest.raises(ValidationError):
+        serialize_profile(profile_invalid)
+

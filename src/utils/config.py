@@ -1,10 +1,17 @@
 import json
+from enum import Enum
 from pathlib import Path
 from typing import Any, cast
 
 
 class ValidationError(Exception):
     pass
+
+
+class StepType(str, Enum):
+    TYPE_TEXT = "type_text"
+    KEYSTROKE = "keystroke"
+    WAIT_FOR_TEXT = "wait_for_text"
 
 
 def serialize_profile(profile_dict: dict[str, Any]) -> str:
@@ -32,6 +39,22 @@ def serialize_profile(profile_dict: dict[str, Any]) -> str:
         raise ValidationError("Missing required field: steps")
     if not isinstance(profile_dict["steps"], list):
         raise ValidationError("steps must be a list")
+
+    for idx, step in enumerate(profile_dict["steps"]):
+        if not isinstance(step, dict):
+            raise ValidationError(f"Step at index {idx} must be a dictionary")
+        if "type" not in step:
+            raise ValidationError(f"Step at index {idx} is missing required field: type")
+        
+        step_type = step["type"]
+        try:
+            StepType(step_type)
+        except ValueError:
+            valid_types = [t.value for t in StepType]
+            raise ValidationError(
+                f"Step at index {idx} has invalid type: '{step_type}'. "
+                f"Must be one of {valid_types}"
+            ) from None
 
     try:
         return json.dumps(profile_dict, indent=2)
