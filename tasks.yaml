@@ -518,7 +518,71 @@ tasks:
       1. Wrap the execution loop in WorkflowRunner.run inside a try...except Exception block.
       2. If an exception occurs, emit the error_occurred signal with the error message and exit.
       3. Verify that workflow_completed is not emitted when an error occurs.
-    implementation_details: |
       - Wrap the entire loop body inside run() with try...except Exception as e:.
       - In the except block, call self.error_occurred.emit(str(e)) and return immediately.
     verification: "pytest tests/test_runner.py"
+
+  # =========================================================================
+  # Phase 9: Mistral OCR Cloud Integration
+  # =========================================================================
+  - id: "task-mistral-ocr-01"
+    phase: "Phase 9: Mistral OCR Cloud Integration"
+    description: "Add Mistral OCR configuration template and gitignore protection."
+    prerequisites: []
+    inputs: []
+    outputs:
+      - .gitignore
+      - .env.example
+      - requirements.txt
+      - main.py
+      - conftest.py
+    tdd_instructions: |
+      1. Verify that .gitignore ignores '.env'.
+      2. Verify that '.env.example' is present in the repository root.
+      3. Verify requirements.txt includes 'mistralai' and 'python-dotenv'.
+      4. Verify that loading main.py and conftest.py loads the dotenv environment.
+    implementation_details: |
+      - Append .env to .gitignore.
+      - Create .env.example with placeholders.
+      - Add dependencies to requirements.txt.
+      - Add load_dotenv() to main.py and conftest.py.
+    verification: "pytest tests/test_ocr.py"
+
+  - id: "task-mistral-ocr-02"
+    phase: "Phase 9: Mistral OCR Cloud Integration"
+    description: "Implement MistralVisionProvider and factory function in ocr.py."
+    prerequisites: ["task-mistral-ocr-01"]
+    inputs:
+      - src/vision/ocr.py
+    outputs:
+      - src/vision/ocr.py
+      - src/engine/runner.py
+      - tests/test_ocr.py
+    tdd_instructions: |
+      1. Write unit tests for MistralVisionProvider and get_vision_provider.
+      2. Mock the mistralai SDK clients and assert correct API calls for screenshot upload, processing, and file deletion.
+      3. Verify it throws ValueError on missing MISTRAL_API_KEY.
+    implementation_details: |
+      - Implement MistralVisionProvider implementing VisionProvider.
+      - Implement get_vision_provider() based on OCR_PROVIDER.
+      - Update WorkflowRunner to default to get_vision_provider().
+    verification: "pytest tests/test_ocr.py"
+
+  - id: "task-mistral-ocr-03"
+    phase: "Phase 9: Mistral OCR Cloud Integration"
+    description: "Integrate OCR provider selection in MainWindow UI."
+    prerequisites: ["task-mistral-ocr-02"]
+    inputs:
+      - src/ui/main_window.py
+    outputs:
+      - src/ui/main_window.py
+      - tests/test_main_window.py
+    tdd_instructions: |
+      1. Write unit tests for QComboBox in MainWindow.
+      2. Verify selection pre-selects correctly based on the environment variables.
+      3. Verify starting the workflow passes the chosen provider to the runner.
+      4. Verify selecting Mistral without an API key raises a QMessageBox warning.
+    implementation_details: |
+      - Add QComboBox for OCR Engine selection.
+      - Update start_current_workflow to instantiate the chosen provider and handle ValueError.
+    verification: "pytest tests/test_main_window.py"

@@ -3,7 +3,7 @@ target_branch: main
 tasks:
 - id: task-p1-01
   description: Initialize the PySide6 MainWindow structure.
-  status: completed
+  status: pending
   branch: tdd-task-p1-01
   worktree_path: .worktrees/task-task-p1-01
   inputs: []
@@ -12,7 +12,7 @@ tasks:
   - tests/test_main_window.py
 - id: task-p1-02
   description: Create the step list layout inside MainWindow.
-  status: completed
+  status: pending
   branch: tdd-task-p1-02
   worktree_path: .worktrees/task-task-p1-02
   inputs:
@@ -22,7 +22,7 @@ tasks:
   - tests/test_main_window.py
 - id: task-p1-03
   description: Create action addition buttons in the MainWindow UI.
-  status: completed
+  status: pending
   branch: tdd-task-p1-03
   worktree_path: .worktrees/task-task-p1-03
   inputs:
@@ -32,7 +32,7 @@ tasks:
   - tests/test_main_window.py
 - id: task-p1-04
   description: Implement profile serialization to JSON dict inside config.py.
-  status: completed
+  status: pending
   branch: tdd-task-p1-04
   worktree_path: .worktrees/task-task-p1-04
   inputs: []
@@ -41,7 +41,7 @@ tasks:
   - tests/test_config.py
 - id: task-p1-05
   description: Implement save_profile_to_file inside config.py.
-  status: completed
+  status: pending
   branch: tdd-task-p1-05
   worktree_path: .worktrees/task-task-p1-05
   inputs:
@@ -51,7 +51,7 @@ tasks:
   - tests/test_config.py
 - id: task-p1-06
   description: Implement load_profile_from_file inside config.py.
-  status: completed
+  status: pending
   branch: tdd-task-p1-06
   worktree_path: .worktrees/task-task-p1-06
   inputs:
@@ -61,7 +61,7 @@ tasks:
   - tests/test_config.py
 - id: task-p2-01
   description: Create WorkflowRunner QThread skeleton.
-  status: completed
+  status: pending
   branch: tdd-task-p2-01
   worktree_path: .worktrees/task-task-p2-01
   inputs: []
@@ -70,7 +70,7 @@ tasks:
   - tests/test_runner.py
 - id: task-p2-02
   description: Implement step loop in WorkflowRunner run method.
-  status: completed
+  status: pending
   branch: tdd-task-p2-02
   worktree_path: .worktrees/task-task-p2-02
   inputs:
@@ -80,7 +80,7 @@ tasks:
   - tests/test_runner.py
 - id: task-p2-03
   description: Highlight MainWindow list items during execution.
-  status: completed
+  status: pending
   branch: tdd-task-p2-03
   worktree_path: .worktrees/task-task-p2-03
   inputs:
@@ -91,7 +91,7 @@ tasks:
   - tests/test_main_window.py
 - id: task-p2-04
   description: Implement focus_window using pygetwindow in src/engine/actions.py.
-  status: completed
+  status: pending
   branch: tdd-task-p2-04
   worktree_path: .worktrees/task-task-p2-04
   inputs: []
@@ -100,7 +100,7 @@ tasks:
   - tests/test_actions.py
 - id: task-p2-05
   description: Implement keystroke and type_text using pyautogui in src/engine/actions.py.
-  status: completed
+  status: pending
   branch: tdd-task-p2-05
   worktree_path: .worktrees/task-task-p2-05
   inputs: []
@@ -109,7 +109,7 @@ tasks:
   - tests/test_actions.py
 - id: task-p3-01
   description: Implement high-speed screen capture using mss.
-  status: completed
+  status: pending
   branch: tdd-task-p3-01
   worktree_path: .worktrees/task-task-p3-01
   inputs: []
@@ -118,7 +118,7 @@ tasks:
   - tests/test_ocr.py
 - id: task-p3-02
   description: Integrate Tesseract OCR text extraction.
-  status: completed
+  status: pending
   branch: tdd-task-p3-02
   worktree_path: .worktrees/task-task-p3-02
   inputs:
@@ -128,7 +128,7 @@ tasks:
   - tests/test_ocr.py
 - id: task-p3-03
   description: Implement wait_for_text polling trigger in runner.py.
-  status: completed
+  status: pending
   branch: tdd-task-p3-03
   worktree_path: .worktrees/task-task-p3-03
   inputs:
@@ -139,7 +139,7 @@ tasks:
   - tests/test_runner.py
 - id: task-p3-04
   description: Implement copy_and_match clipboard text using pyperclip.
-  status: completed
+  status: pending
   branch: tdd-task-p3-04
   worktree_path: .worktrees/task-task-p3-04
   inputs: []
@@ -148,7 +148,7 @@ tasks:
   - tests/test_actions.py
 - id: task-p4-01
   description: Implement register_hotkey using keyboard module.
-  status: completed
+  status: pending
   branch: tdd-task-p4-01
   worktree_path: .worktrees/task-task-p4-01
   inputs: []
@@ -157,7 +157,7 @@ tasks:
   - tests/test_hotkeys.py
 - id: task-p4-02
   description: Link global hotkeys to spawn and start WorkflowRunner.
-  status: completed
+  status: pending
   branch: tdd-task-p4-02
   worktree_path: .worktrees/task-task-p4-02
   inputs:
@@ -169,7 +169,7 @@ tasks:
   - tests/test_hotkeys.py
 - id: task-p4-03
   description: Implement QSystemTrayIcon and minimize behavior.
-  status: completed
+  status: pending
   branch: tdd-task-p4-03
   worktree_path: .worktrees/task-task-p4-03
   inputs: []
@@ -178,7 +178,7 @@ tasks:
   - tests/test_tray_icon.py
 - id: task-p5-01
   description: Create PyInstaller spec file autoflow.spec.
-  status: completed
+  status: pending
   branch: tdd-task-p5-01
   worktree_path: .worktrees/task-task-p5-01
   inputs: []
@@ -186,7 +186,7 @@ tasks:
   - autoflow.spec
 - id: task-p5-02
   description: Configure local fallback path for Tesseract binary.
-  status: completed
+  status: pending
   branch: tdd-task-p5-02
   worktree_path: .worktrees/task-task-p5-02
   inputs:
@@ -197,7 +197,7 @@ tasks:
 - id: task-refactor-p1-01
   description: Define a VisionProvider Protocol in ocr.py and refactor screen capture/extract
     text to implement it.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p1-01
   worktree_path: .worktrees/task-task-refactor-p1-01
   inputs:
@@ -207,7 +207,7 @@ tasks:
   - tests/test_ocr.py
 - id: task-refactor-p1-02
   description: Inject VisionProvider into WorkflowRunner constructor.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p1-02
   worktree_path: .worktrees/task-task-refactor-p1-02
   inputs:
@@ -217,7 +217,7 @@ tasks:
   - tests/test_runner.py
 - id: task-refactor-p1-03
   description: Decouple MainWindow from direct Hotkey and Runner creation.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p1-03
   worktree_path: .worktrees/task-task-refactor-p1-03
   inputs:
@@ -227,7 +227,7 @@ tasks:
   - tests/test_main_window.py
 - id: task-refactor-p2-01
   description: Create StepType Enum to replace hardcoded strings.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p2-01
   worktree_path: .worktrees/task-task-refactor-p2-01
   inputs:
@@ -241,7 +241,7 @@ tasks:
   - tests/test_config.py
 - id: task-refactor-p2-02
   description: Extract magic interval durations and hex colors into constants.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p2-02
   worktree_path: .worktrees/task-task-refactor-p2-02
   inputs:
@@ -255,7 +255,7 @@ tasks:
   - tests/test_actions.py
 - id: task-refactor-p3-01
   description: Protect _is_running flag in WorkflowRunner using a thread-safe primitive.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p3-01
   worktree_path: .worktrees/task-task-refactor-p3-01
   inputs:
@@ -265,7 +265,7 @@ tasks:
   - tests/test_runner.py
 - id: task-refactor-p3-02
   description: Deep copy steps in WorkflowRunner constructor.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p3-02
   worktree_path: .worktrees/task-task-refactor-p3-02
   inputs:
@@ -277,7 +277,7 @@ tasks:
   - tests/test_main_window.py
 - id: task-refactor-p3-03
   description: Add global try-except safety block to WorkflowRunner run loop.
-  status: completed
+  status: pending
   branch: tdd-task-refactor-p3-03
   worktree_path: .worktrees/task-task-refactor-p3-03
   inputs:
@@ -285,3 +285,36 @@ tasks:
   outputs:
   - src/engine/runner.py
   - tests/test_runner.py
+- id: task-mistral-ocr-01
+  description: Add Mistral OCR configuration template and gitignore protection.
+  status: pending
+  branch: tdd-task-mistral-ocr-01
+  worktree_path: .worktrees/task-task-mistral-ocr-01
+  inputs: []
+  outputs:
+  - .gitignore
+  - .env.example
+  - requirements.txt
+  - main.py
+  - conftest.py
+- id: task-mistral-ocr-02
+  description: Implement MistralVisionProvider and factory function in ocr.py.
+  status: pending
+  branch: tdd-task-mistral-ocr-02
+  worktree_path: .worktrees/task-task-mistral-ocr-02
+  inputs:
+  - src/vision/ocr.py
+  outputs:
+  - src/vision/ocr.py
+  - src/engine/runner.py
+  - tests/test_ocr.py
+- id: task-mistral-ocr-03
+  description: Integrate OCR provider selection in MainWindow UI.
+  status: pending
+  branch: tdd-task-mistral-ocr-03
+  worktree_path: .worktrees/task-task-mistral-ocr-03
+  inputs:
+  - src/ui/main_window.py
+  outputs:
+  - src/ui/main_window.py
+  - tests/test_main_window.py
