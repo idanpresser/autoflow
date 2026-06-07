@@ -1,7 +1,7 @@
 import time
 from typing import Any
 
-from PySide6.QtCore import QThread, Signal
+from PySide6.QtCore import QMutex, QMutexLocker, QThread, Signal
 
 from src.vision.ocr import VisionProvider, TesseractVisionProvider
 
@@ -17,18 +17,27 @@ class WorkflowRunner(QThread):
     def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
         super().__init__()
         self.steps = steps
+        self._mutex = QMutex()
         self._is_running = True
         self.vision_provider = vision_provider if vision_provider is not None else TesseractVisionProvider()
 
+    def stop(self) -> None:
+        locker = QMutexLocker(self._mutex)
+        self._is_running = False
+
+    def is_running(self) -> bool:
+        locker = QMutexLocker(self._mutex)
+        return self._is_running
+
     def run(self) -> None:
         for index, _step in enumerate(self.steps):
-            if not self._is_running:
+            if not self.is_running():
                 break
 
             # Emitting finished signal for the step
             self.step_finished.emit(index)
 
-        if self._is_running:
+        if self.is_running():
             self.workflow_completed.emit("Success")
 
     def wait_for_ocr(self, target: str, timeout: float) -> None:
@@ -38,7 +47,7 @@ class WorkflowRunner(QThread):
         """
         start_time = time.time()
         while time.time() - start_time < timeout:
-            if not self._is_running:
+            if not self.is_running():
                 raise RuntimeError("Workflow runner stopped")
 
             img = self.vision_provider.capture_screen()

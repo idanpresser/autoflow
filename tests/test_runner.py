@@ -131,3 +131,18 @@ def test_workflow_runner_vision_injection() -> None:
         assert mock_sleep.call_count == 2
 
 
+def test_workflow_runner_thread_safe_stop() -> None:
+    runner = WorkflowRunner([])
+    assert runner.is_running() is True
+
+    runner.stop()
+    assert runner.is_running() is False
+
+    # Check that run() breaks immediately if stopped
+    finished_indices: list[int] = []
+    runner.step_finished.connect(finished_indices.append)
+    runner.run()
+    assert finished_indices == []
+
+
+
