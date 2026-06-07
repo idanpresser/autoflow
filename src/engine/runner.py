@@ -3,7 +3,7 @@ from typing import Any
 
 from PySide6.QtCore import QThread, Signal
 
-from src.vision.ocr import capture_screen, extract_text
+from src.vision.ocr import VisionProvider, TesseractVisionProvider
 
 
 class WorkflowRunner(QThread):
@@ -11,10 +11,11 @@ class WorkflowRunner(QThread):
     workflow_completed = Signal(str)
     error_occurred = Signal(str)
 
-    def __init__(self, steps: list[dict[str, Any]]) -> None:
+    def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
         super().__init__()
         self.steps = steps
         self._is_running = True
+        self.vision_provider = vision_provider if vision_provider is not None else TesseractVisionProvider()
 
     def run(self) -> None:
         for index, _step in enumerate(self.steps):
@@ -37,11 +38,12 @@ class WorkflowRunner(QThread):
             if not self._is_running:
                 raise RuntimeError("Workflow runner stopped")
 
-            img = capture_screen()
-            text = extract_text(img)
+            img = self.vision_provider.capture_screen()
+            text = self.vision_provider.extract_text(img)
             if target in text:
                 return
 
             time.sleep(0.5)
 
         raise TimeoutError(f"Timeout waiting for text '{target}'")
+
