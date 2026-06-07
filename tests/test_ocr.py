@@ -17,3 +17,24 @@ def test_extract_text():
         assert text == "READY"
         mock_ocr.assert_called_once_with(mock_img)
 
+def test_tesseract_fallback_path():
+    import os
+    import importlib
+    import src.vision.ocr as ocr
+    import pytesseract
+    from unittest.mock import patch
+    
+    original_cmd = pytesseract.pytesseract.tesseract_cmd
+    
+    try:
+        def side_effect(path):
+            normalized = os.path.normpath(path)
+            return normalized.endswith(os.path.normpath("bin/tesseract/tesseract.exe"))
+            
+        with patch("os.path.exists", side_effect=side_effect):
+            importlib.reload(ocr)
+            assert os.path.normpath("bin/tesseract/tesseract.exe") in os.path.normpath(pytesseract.pytesseract.tesseract_cmd)
+    finally:
+        pytesseract.pytesseract.tesseract_cmd = original_cmd
+
+
