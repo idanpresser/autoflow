@@ -197,6 +197,8 @@ tasks:
 - id: task-refactor-p1-01
   description: Define a VisionProvider Protocol in ocr.py and refactor screen capture/extract text to implement it.
   status: pending
+  branch: tdd-task-refactor-p1-01
+  worktree_path: .worktrees/task-task-refactor-p1-01
   inputs:
   - src/vision/ocr.py
   outputs:
@@ -205,6 +207,8 @@ tasks:
 - id: task-refactor-p1-02
   description: Inject VisionProvider into WorkflowRunner constructor.
   status: pending
+  branch: tdd-task-refactor-p1-02
+  worktree_path: .worktrees/task-task-refactor-p1-02
   inputs:
   - src/engine/runner.py
   outputs:
@@ -213,6 +217,8 @@ tasks:
 - id: task-refactor-p1-03
   description: Decouple MainWindow from direct Hotkey and Runner creation.
   status: pending
+  branch: tdd-task-refactor-p1-03
+  worktree_path: .worktrees/task-task-refactor-p1-03
   inputs:
   - src/ui/main_window.py
   outputs:
@@ -221,6 +227,8 @@ tasks:
 - id: task-refactor-p2-01
   description: Create StepType Enum to replace hardcoded strings.
   status: pending
+  branch: tdd-task-refactor-p2-01
+  worktree_path: .worktrees/task-task-refactor-p2-01
   inputs:
   - src/engine/runner.py
   - src/ui/main_window.py
@@ -233,6 +241,8 @@ tasks:
 - id: task-refactor-p2-02
   description: Extract magic interval durations and hex colors into constants.
   status: pending
+  branch: tdd-task-refactor-p2-02
+  worktree_path: .worktrees/task-task-refactor-p2-02
   inputs:
   - src/engine/actions.py
   - src/engine/runner.py
@@ -245,6 +255,8 @@ tasks:
 - id: task-refactor-p3-01
   description: Protect _is_running flag in WorkflowRunner using a thread-safe primitive.
   status: pending
+  branch: tdd-task-refactor-p3-01
+  worktree_path: .worktrees/task-task-refactor-p3-01
   inputs:
   - src/engine/runner.py
   outputs:
@@ -253,6 +265,8 @@ tasks:
 - id: task-refactor-p3-02
   description: Deep copy steps in WorkflowRunner constructor.
   status: pending
+  branch: tdd-task-refactor-p3-02
+  worktree_path: .worktrees/task-task-refactor-p3-02
   inputs:
   - src/engine/runner.py
   - src/ui/main_window.py
@@ -263,6 +277,8 @@ tasks:
 - id: task-refactor-p3-03
   description: Add global try-except safety block to WorkflowRunner run loop.
   status: pending
+  branch: tdd-task-refactor-p3-03
+  worktree_path: .worktrees/task-task-refactor-p3-03
   inputs:
   - src/engine/runner.py
   outputs:
