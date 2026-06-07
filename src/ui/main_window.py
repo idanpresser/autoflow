@@ -3,6 +3,7 @@ from PySide6.QtWidgets import (
     QListWidget, QPushButton, QInputDialog, QListWidgetItem
 )
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QColor
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -64,3 +65,9 @@ class MainWindow(QMainWindow):
                 item = QListWidgetItem(f"Wait for Text: {text} ({timeout}s)", self.step_list)
                 item.setData(Qt.UserRole, {"type": "wait_for_text", "text": text, "timeout_sec": timeout})
                 self.step_list.addItem(item)
+
+    def on_step_finished(self, index):
+        if 0 <= index < self.step_list.count():
+            item = self.step_list.item(index)
+            item.setBackground(QColor("#2e7d32"))
+

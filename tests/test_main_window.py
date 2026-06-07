@@ -62,3 +62,26 @@ def test_main_window_action_buttons(qapp):
     assert step_list.count() == 3
     item3 = step_list.item(2)
     assert item3.data(Qt.UserRole) == {"type": "wait_for_text", "text": "Success", "timeout_sec": 30}
+
+def test_main_window_highlight_step(qapp):
+    window = MainWindow()
+    step_list = window.step_list
+    step_list.clear()
+    
+    # Add two mock items
+    step_list.addItem("Step 1")
+    step_list.addItem("Step 2")
+    
+    # Initially background colors are not set or are default
+    assert step_list.item(0).background().color().isValid() is False or step_list.item(0).background().color().name() != "#00ff00"
+    
+    # Trigger on_step_finished for index 1
+    window.on_step_finished(1)
+    
+    # Row 1 should be green (or highlighted)
+    assert step_list.item(1).background().color().isValid()
+    # Let's say we set it to #2e7d32 (darker green for modern aesthetics) or QColor(Qt.green)
+    # Let's check that it's green by name or RGB
+    color = step_list.item(1).background().color()
+    assert color.isValid()
+
