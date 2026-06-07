@@ -25,15 +25,14 @@ def test_register_hotkey_failure() -> None:
 
 
 def test_hotkey_spawns_runner(qapp: QApplication) -> None:
-    from unittest.mock import patch
+    from unittest.mock import MagicMock, patch
 
     from src.ui.main_window import MainWindow
 
-    window = MainWindow()
+    mock_register = MagicMock()
 
-    with patch("src.ui.main_window.register_hotkey") as mock_register, patch(
-        "src.engine.runner.WorkflowRunner.start"
-    ) as mock_start:
+    with patch("src.engine.runner.WorkflowRunner.start") as mock_start:
+        window = MainWindow(register_hotkey_fn=mock_register)
         window.setup_hotkey("ctrl+shift+p")
         mock_register.assert_called_once()
 
@@ -45,3 +44,4 @@ def test_hotkey_spawns_runner(qapp: QApplication) -> None:
 
         mock_start.assert_called_once()
         assert window.runner is not None
+

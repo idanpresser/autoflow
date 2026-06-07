@@ -1,4 +1,6 @@
-from PySide6.QtCore import QObject, Qt, Signal
+from typing import Any, Callable
+
+from PySide6.QtCore import QObject, QThread, Qt, Signal
 from PySide6.QtGui import QCloseEvent, QColor
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -20,8 +22,16 @@ class HotkeyBridge(QObject):
 
 
 class MainWindow(QMainWindow):
-    def __init__(self) -> None:
+    def __init__(
+        self,
+        register_hotkey_fn: Callable[[str, Callable[[], None]], None] | None = None,
+        runner_factory: Callable[[list[dict[str, Any]]], QThread] | None = None,
+    ) -> None:
         super().__init__()
+        self._register_hotkey_fn = (
+            register_hotkey_fn if register_hotkey_fn is not None else register_hotkey
+        )
+        self._runner_factory = runner_factory if runner_factory is not None else WorkflowRunner
         self.setWindowTitle("AutoFlow")
         self.resize(800, 600)
 
@@ -102,7 +112,7 @@ class MainWindow(QMainWindow):
         def callback() -> None:
             self.hotkey_bridge.hotkey_triggered.emit()
 
-        register_hotkey(hotkey_str, callback)
+        self._register_hotkey_fn(hotkey_str, callback)
 
     def start_current_workflow(self) -> None:
         """
@@ -117,7 +127,7 @@ class MainWindow(QMainWindow):
         for i in range(self.step_list.count()):
             self.step_list.item(i).setBackground(Qt.BrushStyle.NoBrush)
 
-        self.runner = WorkflowRunner(steps)
+        self.runner = self._runner_factory(steps)
         self.runner.step_finished.connect(self.on_step_finished)
         self.runner.start()
 
@@ -127,3 +137,4 @@ class MainWindow(QMainWindow):
         """
         event.ignore()
         self.hide()
+

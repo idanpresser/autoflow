@@ -97,3 +97,32 @@ def test_main_window_highlight_step(qapp: QApplication) -> None:
     # Let's check that it's green by name or RGB
     color = item1.background().color()
     assert color.isValid()
+
+
+def test_main_window_dependency_injection(qapp: QApplication) -> None:
+    from unittest.mock import MagicMock
+    from src.ui.main_window import MainWindow
+
+    mock_register = MagicMock()
+    mock_runner_factory = MagicMock()
+
+    window = MainWindow(
+        register_hotkey_fn=mock_register,
+        runner_factory=mock_runner_factory
+    )
+
+    # Verify setup_hotkey calls the injected register function
+    window.setup_hotkey("ctrl+shift+x")
+    mock_register.assert_called_once()
+
+    # Extract callback passed to register_hotkey_fn
+    call_args = mock_register.call_args[0]
+    assert call_args[0] == "ctrl+shift+x"
+    callback = call_args[1]
+
+    # Verify that triggering the callback invokes the runner factory
+    callback()
+    qapp.processEvents()
+
+    mock_runner_factory.assert_called_once()
+
