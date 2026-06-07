@@ -105,4 +105,12 @@ class MainWindow(QMainWindow):
         self.runner.step_finished.connect(self.on_step_finished)
         self.runner.start()
 
+    def closeEvent(self, event):
+        """
+        Overrides the close event to hide the window instead of closing the application.
+        """
+        event.ignore()
+        self.hide()
+
+
 
