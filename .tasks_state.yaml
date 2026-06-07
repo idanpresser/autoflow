@@ -195,8 +195,9 @@ tasks:
   - src/vision/ocr.py
   - tests/test_ocr.py
 - id: task-refactor-p1-01
-  description: Define a VisionProvider Protocol in ocr.py and refactor screen capture/extract text to implement it.
-  status: pending
+  description: Define a VisionProvider Protocol in ocr.py and refactor screen capture/extract
+    text to implement it.
+  status: completed
   branch: tdd-task-refactor-p1-01
   worktree_path: .worktrees/task-task-refactor-p1-01
   inputs:
