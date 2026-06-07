@@ -35,3 +35,24 @@ class SystemTrayIcon(QSystemTrayIcon):
         from PySide6.QtWidgets import QApplication
 
         QApplication.quit()
+
+    def show_notification(self, title: str, message: str) -> None:
+        """Shows a system tray balloon notification."""
+        self.showMessage(title, message, QSystemTrayIcon.MessageIcon.Information, 5000)
+
+    def show_running(self, profile_name: str) -> None:
+        """Shows a notification that a workflow profile has started running."""
+        self.show_notification("AutoFlow", f"Running profile: {profile_name}")
+
+    def show_completed(self, profile_name: str) -> None:
+        """Shows a notification that a workflow profile completed successfully."""
+        self.show_notification("AutoFlow", f"Profile completed: {profile_name}")
+
+    def show_error(self, profile_name: str, error: str) -> None:
+        """Shows an error notification for a workflow profile."""
+        self.showMessage(
+            "AutoFlow Error",
+            f"Profile '{profile_name}' failed: {error}",
+            QSystemTrayIcon.MessageIcon.Critical,
+            5000,
+        )

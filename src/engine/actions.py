@@ -1,5 +1,11 @@
+import logging
+import subprocess
+import time
+
 import pyautogui
 import pygetwindow as gw
+
+logger = logging.getLogger(__name__)
 
 # Enforce pyautogui fail-safe as required by the alignment constraints
 pyautogui.FAILSAFE = True
@@ -61,3 +67,34 @@ def copy_and_match(pattern: str) -> str | None:
     if match.groups():
         return match.group(1)
     return match.group(0)
+
+
+def wait_delay(seconds: float) -> None:
+    """
+    Pauses execution for the specified number of seconds.
+    """
+    logger.info("Waiting for %.1f seconds", seconds)
+    time.sleep(seconds)
+
+
+def run_command(command: str, timeout: float = 60.0) -> str:
+    """
+    Executes a shell command and returns its stdout output.
+    Raises RuntimeError if the command fails or times out.
+    """
+    logger.info("Running command: %s", command)
+    try:
+        result = subprocess.run(
+            command,
+            shell=True,  # noqa: S602
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+        )
+        if result.returncode != 0:
+            error_msg = result.stderr.strip() or f"Command exited with code {result.returncode}"
+            raise RuntimeError(f"Command failed: {error_msg}")
+        return result.stdout
+    except subprocess.TimeoutExpired as e:
+        raise RuntimeError(f"Command timed out after {timeout}s: {command}") from e
+

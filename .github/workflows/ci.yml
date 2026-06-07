@@ -20,9 +20,13 @@ jobs:
         enable-cache: true
         python-version: '3.12'
 
+    - name: Install Tesseract-OCR
+      run: |
+        choco install tesseract --yes
+
     - name: Install Dependencies
       run: |
-        uv pip install -r requirements.txt
+        uv pip install --system -r requirements.txt
 
     - name: Run Ruff Linter
       run: |

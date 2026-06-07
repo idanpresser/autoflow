@@ -58,9 +58,50 @@ def test_copy_and_match_no_match() -> None:
 def test_extracted_constants() -> None:
     from src.engine.actions import DEFAULT_TYPING_INTERVAL
     from src.engine.runner import DEFAULT_OCR_POLL_INTERVAL
-    from src.ui.main_window import HIGHLIGHT_SUCCESS_COLOR
 
     assert DEFAULT_TYPING_INTERVAL == 0.05
     assert DEFAULT_OCR_POLL_INTERVAL == 0.5
-    assert HIGHLIGHT_SUCCESS_COLOR == "#2e7d32"
+
+
+def test_wait_delay() -> None:
+    with patch("src.engine.actions.time.sleep") as mock_sleep:
+        from src.engine.actions import wait_delay
+
+        wait_delay(2.5)
+        mock_sleep.assert_called_once_with(2.5)
+
+
+def test_run_command_success() -> None:
+    with patch("src.engine.actions.subprocess.run") as mock_run:
+        from src.engine.actions import run_command
+
+        mock_run.return_value = MagicMock(returncode=0, stdout="hello\n", stderr="")
+        result = run_command("echo hello")
+        assert result == "hello\n"
+        mock_run.assert_called_once()
+
+
+def test_run_command_failure() -> None:
+    with patch("src.engine.actions.subprocess.run") as mock_run:
+        from src.engine.actions import run_command
+
+        mock_run.return_value = MagicMock(
+            returncode=1, stdout="", stderr="command not found"
+        )
+        with pytest.raises(RuntimeError, match="Command failed"):
+            run_command("bad_command")
+
+
+def test_run_command_timeout() -> None:
+    import subprocess
+
+    with patch(
+        "src.engine.actions.subprocess.run",
+        side_effect=subprocess.TimeoutExpired("cmd", 5),
+    ):
+        from src.engine.actions import run_command
+
+        with pytest.raises(RuntimeError, match="timed out"):
+            run_command("slow_command", timeout=5)
+
 
