@@ -47,3 +47,14 @@ def test_tesseract_fallback_path() -> None:
             )
     finally:
         pytesseract.pytesseract.tesseract_cmd = original_cmd
+
+
+def test_vision_provider_protocol() -> None:
+    from src.vision.ocr import VisionProvider, TesseractVisionProvider
+
+    assert issubclass(TesseractVisionProvider, VisionProvider)
+
+    provider = TesseractVisionProvider()
+    assert hasattr(provider, "capture_screen")
+    assert hasattr(provider, "extract_text")
+
