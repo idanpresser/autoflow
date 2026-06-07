@@ -4,9 +4,14 @@ from pathlib import Path
 from typing import cast
 
 import pytest
+from dotenv import load_dotenv
 from PySide6.QtWidgets import QApplication
 
+# Load environment variables for testing environment
+load_dotenv()
+
 sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 
 
 @pytest.fixture(scope="session")
