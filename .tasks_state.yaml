@@ -217,7 +217,7 @@ tasks:
   - tests/test_runner.py
 - id: task-refactor-p1-03
   description: Decouple MainWindow from direct Hotkey and Runner creation.
-  status: pending
+  status: completed
   branch: tdd-task-refactor-p1-03
   worktree_path: .worktrees/task-task-refactor-p1-03
   inputs:
