@@ -1,4 +1,8 @@
 import pygetwindow as gw
+import pyautogui
+
+# Enforce pyautogui fail-safe as required by the alignment constraints
+pyautogui.FAILSAFE = True
 
 def focus_window(title):
     """
@@ -20,3 +24,16 @@ def focus_window(title):
             win.activate()
         except Exception as e:
             raise RuntimeError(f"Failed to focus window '{title}': {e}")
+
+def type_text(text):
+    """
+    Types the specified text using pyautogui with a small safe interval.
+    """
+    pyautogui.write(text, interval=0.05)
+
+def send_keystroke(keys):
+    """
+    Sends a keystroke combination.
+    """
+    pyautogui.hotkey(*keys)
+
