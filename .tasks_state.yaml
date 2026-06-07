@@ -265,7 +265,7 @@ tasks:
   - tests/test_runner.py
 - id: task-refactor-p3-02
   description: Deep copy steps in WorkflowRunner constructor.
-  status: pending
+  status: completed
   branch: tdd-task-refactor-p3-02
   worktree_path: .worktrees/task-task-refactor-p3-02
   inputs:
