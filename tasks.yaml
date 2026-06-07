@@ -348,3 +348,177 @@ tasks:
     implementation_details: |
       - In src/vision/ocr.py, check if bin/tesseract/tesseract.exe exists. If yes, assign its path to pytesseract.pytesseract.tesseract_cmd.
     verification: "pytest tests/test_ocr.py"
+
+  # =========================================================================
+  # Phase 6: Codebase Review Refactoring - Decoupling & DI
+  # =========================================================================
+  - id: "task-refactor-p1-01"
+    phase: "Phase 6: Codebase Review Refactoring - Decoupling & DI"
+    description: "Define a VisionProvider Protocol in ocr.py and refactor screen capture/extract text to implement it."
+    prerequisites: []
+    inputs:
+      - src/vision/ocr.py
+    outputs:
+      - src/vision/ocr.py
+      - tests/test_ocr.py
+    tdd_instructions: |
+      1. Define a VisionProvider Protocol in src/vision/ocr.py.
+      2. The protocol must declare capture_screen(self) -> np.ndarray and extract_text(self, image_np: np.ndarray) -> str.
+      3. Implement TesseractVisionProvider as the default concrete class in src/vision/ocr.py.
+      4. Refactor tests/test_ocr.py to test the new class structure.
+    implementation_details: |
+      - Add typing imports: from typing import Protocol, runtime_checkable.
+      - Add class VisionProvider(Protocol) with capture_screen and extract_text signatures.
+      - Refactor existing capture_screen and extract_text to be methods on a new class TesseractVisionProvider.
+      - Export a default instance or the class from src/vision/ocr.py to preserve backward compatibility.
+    verification: "pytest tests/test_ocr.py"
+
+  - id: "task-refactor-p1-02"
+    phase: "Phase 6: Codebase Review Refactoring - Decoupling & DI"
+    description: "Inject VisionProvider into WorkflowRunner constructor."
+    prerequisites: ["task-refactor-p1-01"]
+    inputs:
+      - src/engine/runner.py
+    outputs:
+      - src/engine/runner.py
+      - tests/test_runner.py
+    tdd_instructions: |
+      1. Modify WorkflowRunner in src/engine/runner.py to accept an optional vision_provider parameter.
+      2. If vision_provider is None, default to a TesseractVisionProvider instance.
+      3. In wait_for_ocr, invoke self.vision_provider.capture_screen and self.vision_provider.extract_text instead of global functions.
+    implementation_details: |
+      - Modify WorkflowRunner.__init__ to accept vision_provider: VisionProvider | None = None.
+      - Save it to self.vision_provider. If None, instantiate TesseractVisionProvider().
+      - Update WorkflowRunner.wait_for_ocr to call self.vision_provider methods.
+      - Update tests/test_runner.py to define a MockVisionProvider and use it in tests.
+    verification: "pytest tests/test_runner.py"
+
+  - id: "task-refactor-p1-03"
+    phase: "Phase 6: Codebase Review Refactoring - Decoupling & DI"
+    description: "Decouple MainWindow from direct Hotkey and Runner creation."
+    prerequisites: ["task-refactor-p1-02"]
+    inputs:
+      - src/ui/main_window.py
+    outputs:
+      - src/ui/main_window.py
+      - tests/test_main_window.py
+    tdd_instructions: |
+      1. Modify MainWindow.__init__ in src/ui/main_window.py to accept register_hotkey_fn and runner_factory as constructor arguments.
+      2. Default register_hotkey_fn to the utility function register_hotkey and runner_factory to instantiate WorkflowRunner.
+      3. Use injected dependencies in setup_hotkey and start_current_workflow.
+    implementation_details: |
+      - Modify MainWindow.__init__ signature to accept register_hotkey_fn and runner_factory.
+      - Assign them to self._register_hotkey_fn and self._runner_factory.
+      - Update setup_hotkey to call self._register_hotkey_fn.
+      - Update start_current_workflow to instantiate the runner via self._runner_factory.
+    verification: "pytest tests/test_main_window.py tests/test_hotkeys.py"
+
+  # =========================================================================
+  # Phase 7: Codebase Review Refactoring - Magic Strings and Numbers
+  # =========================================================================
+  - id: "task-refactor-p2-01"
+    phase: "Phase 7: Codebase Review Refactoring - Magic Strings and Numbers"
+    description: "Create StepType Enum to replace hardcoded strings."
+    prerequisites: []
+    inputs:
+      - src/engine/runner.py
+      - src/ui/main_window.py
+      - src/utils/config.py
+    outputs:
+      - src/engine/runner.py
+      - src/ui/main_window.py
+      - src/utils/config.py
+      - tests/test_config.py
+    tdd_instructions: |
+      1. Define a StepType Enum class (subclassing str and Enum) in src/utils/config.py.
+      2. Map Enum values to 'type_text', 'keystroke', and 'wait_for_text'.
+      3. Update validation, GUI step-creation, and runner logic to utilize the Enum.
+    implementation_details: |
+      - Define StepType(str, Enum) with TYPE_TEXT = 'type_text', KEYSTROKE = 'keystroke', and WAIT_FOR_TEXT = 'wait_for_text'.
+      - Update serialize_profile to validate that step['type'] is a valid StepType value.
+      - Open src/ui/main_window.py and replace raw string literals with StepType enum properties.
+      - Open src/engine/runner.py and update any type checks to compare with StepType members.
+    verification: "pytest tests/test_config.py tests/test_runner.py tests/test_main_window.py"
+
+  - id: "task-refactor-p2-02"
+    phase: "Phase 7: Codebase Review Refactoring - Magic Strings and Numbers"
+    description: "Extract magic interval durations and hex colors into constants."
+    prerequisites: []
+    inputs:
+      - src/engine/actions.py
+      - src/engine/runner.py
+      - src/ui/main_window.py
+    outputs:
+      - src/engine/actions.py
+      - src/engine/runner.py
+      - src/ui/main_window.py
+      - tests/test_actions.py
+    tdd_instructions: |
+      1. Extract pyautogui typing delay from actions.py into a DEFAULT_TYPING_INTERVAL constant.
+      2. Extract OCR polling loop sleep from runner.py into a DEFAULT_OCR_POLL_INTERVAL constant.
+      3. Extract QColor styling string from main_window.py into a HIGHLIGHT_SUCCESS_COLOR constant.
+    implementation_details: |
+      - Declare DEFAULT_TYPING_INTERVAL = 0.05 in src/engine/actions.py.
+      - Declare DEFAULT_OCR_POLL_INTERVAL = 0.5 in src/engine/runner.py.
+      - Declare HIGHLIGHT_SUCCESS_COLOR = '#2e7d32' in src/ui/main_window.py.
+    verification: "pytest tests/test_actions.py tests/test_runner.py tests/test_main_window.py"
+
+  # =========================================================================
+  # Phase 8: Codebase Review Refactoring - Concurrency & Thread Safety
+  # =========================================================================
+  - id: "task-refactor-p3-01"
+    phase: "Phase 8: Codebase Review Refactoring - Concurrency & Thread Safety"
+    description: "Protect _is_running flag in WorkflowRunner using a thread-safe primitive."
+    prerequisites: []
+    inputs:
+      - src/engine/runner.py
+    outputs:
+      - src/engine/runner.py
+      - tests/test_runner.py
+    tdd_instructions: |
+      1. Initialize a QMutex inside WorkflowRunner.__init__ to protect the running state.
+      2. Implement thread-safe stop() and is_running() methods using QMutexLocker.
+      3. Replace direct self._is_running reads/writes in runner.py with these methods.
+    implementation_details: |
+      - Import QMutex and QMutexLocker from PySide6.QtCore.
+      - Add self._mutex = QMutex() in WorkflowRunner.__init__.
+      - Implement stop() and is_running() methods.
+      - Update run loop and wait_for_ocr to call self.is_running().
+    verification: "pytest tests/test_runner.py"
+
+  - id: "task-refactor-p3-02"
+    phase: "Phase 8: Codebase Review Refactoring - Concurrency & Thread Safety"
+    description: "Deep copy steps in WorkflowRunner constructor."
+    prerequisites: []
+    inputs:
+      - src/engine/runner.py
+      - src/ui/main_window.py
+    outputs:
+      - src/engine/runner.py
+      - src/ui/main_window.py
+      - tests/test_main_window.py
+    tdd_instructions: |
+      1. Import copy in src/engine/runner.py.
+      2. Perform deepcopy on the steps list when initializing WorkflowRunner.
+    implementation_details: |
+      - Import copy at the top of src/engine/runner.py.
+      - Change self.steps = steps to self.steps = copy.deepcopy(steps) inside WorkflowRunner.__init__.
+    verification: "pytest tests/test_runner.py"
+
+  - id: "task-refactor-p3-03"
+    phase: "Phase 8: Codebase Review Refactoring - Concurrency & Thread Safety"
+    description: "Add global try-except safety block to WorkflowRunner run loop."
+    prerequisites: []
+    inputs:
+      - src/engine/runner.py
+    outputs:
+      - src/engine/runner.py
+      - tests/test_runner.py
+    tdd_instructions: |
+      1. Wrap the execution loop in WorkflowRunner.run inside a try...except Exception block.
+      2. If an exception occurs, emit the error_occurred signal with the error message and exit.
+      3. Verify that workflow_completed is not emitted when an error occurs.
+    implementation_details: |
+      - Wrap the entire loop body inside run() with try...except Exception as e:.
+      - In the except block, call self.error_occurred.emit(str(e)) and return immediately.
+    verification: "pytest tests/test_runner.py"

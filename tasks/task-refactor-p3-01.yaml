@@ -1,0 +1,47 @@
+id: "task-refactor-p3-01"
+title: "Protect _is_running flag in WorkflowRunner using a thread-safe primitive"
+phase: "Phase 3: Concurrency and Thread Safety"
+prerequisites: []
+requirements:
+- "Initialize a QMutex inside WorkflowRunner.__init__ to protect the running state."
+- "Implement thread-safe stop() and is_running() methods using QMutexLocker or direct mutex locking."
+- "Replace direct self._is_running reads/writes in runner.py with these methods."
+step_by_step_instructions:
+- "Open src/engine/runner.py."
+- "Import QMutex and QMutexLocker from PySide6.QtCore."
+- "In WorkflowRunner.__init__, add self._mutex = QMutex()."
+- "Create stop() method that acquires the mutex and sets self._is_running = False."
+- "Create is_running() method that acquires the mutex and returns self._is_running."
+- "Update the run loop condition to check self.is_running()."
+- "Update wait_for_ocr to check self.is_running() instead of self._is_running."
+- "Update tests/test_runner.py to call runner.stop() instead of setting private state variables directly."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert that calling runner.stop() safely changes runner.is_running() to False."
+  - "Assert that the run loop immediately breaks when runner.stop() is triggered."
+  mocking_guide:
+  - "Use a short-running thread or manual loop triggers to ensure mutex locks don't deadlock."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    from PySide6.QtCore import QMutex, QMutexLocker
+
+    class WorkflowRunner(QThread):
+        def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
+            super().__init__()
+            self.steps = steps
+            self._mutex = QMutex()
+            self._is_running = True
+
+        def stop(self) -> None:
+            locker = QMutexLocker(self._mutex)
+            self._is_running = False
+
+        def is_running(self) -> bool:
+            locker = QMutexLocker(self._mutex)
+            return self._is_running
+  edge_cases:
+  - "Ensure no double-locking occur if stop() is called multiple times or while running is active."
+verification_command: "pytest tests/test_runner.py"

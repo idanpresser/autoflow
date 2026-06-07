@@ -1,0 +1,38 @@
+id: "task-refactor-p2-02"
+title: "Extract magic interval durations and hex colors into constants"
+phase: "Phase 2: Magic Strings and Numbers Extraction"
+prerequisites: []
+requirements:
+- "Extract pyautogui typing delay from actions.py into a DEFAULT_TYPING_INTERVAL constant."
+- "Extract OCR polling loop sleep from runner.py into a DEFAULT_OCR_POLL_INTERVAL constant."
+- "Extract QColor styling string from main_window.py into a HIGHLIGHT_SUCCESS_COLOR constant."
+step_by_step_instructions:
+- "Open src/engine/actions.py and declare DEFAULT_TYPING_INTERVAL = 0.05 at module level. Replace inline 0.05 usage."
+- "Open src/engine/runner.py and declare DEFAULT_OCR_POLL_INTERVAL = 0.5 at module level. Replace inline 0.5 usage."
+- "Open src/ui/main_window.py and declare HIGHLIGHT_SUCCESS_COLOR = '#2e7d32' at module level. Replace inline '#2e7d32' usage."
+- "Update tests/test_actions.py, tests/test_runner.py, and tests/test_main_window.py to verify constants are accessible and used correctly."
+tdd_instructions:
+  tests_file: "tests/test_actions.py"
+  assertions:
+  - "Assert that src.engine.actions.DEFAULT_TYPING_INTERVAL is equal to 0.05."
+  - "Assert that src.engine.runner.DEFAULT_OCR_POLL_INTERVAL is equal to 0.5."
+  - "Assert that src.ui.main_window.HIGHLIGHT_SUCCESS_COLOR is equal to '#2e7d32'."
+  mocking_guide:
+  - "Verify via unit tests that the values are correctly imported and matches expected defaults."
+implementation_details:
+  files_to_modify:
+  - "src/engine/actions.py"
+  - "src/engine/runner.py"
+  - "src/ui/main_window.py"
+  api_signature: |
+    # src/engine/actions.py
+    DEFAULT_TYPING_INTERVAL = 0.05
+
+    # src/engine/runner.py
+    DEFAULT_OCR_POLL_INTERVAL = 0.5
+
+    # src/ui/main_window.py
+    HIGHLIGHT_SUCCESS_COLOR = "#2e7d32"
+  edge_cases:
+  - "Ensure the constants can be overridden or imported by test cases without modifying module implementations directly."
+verification_command: "pytest tests/test_actions.py tests/test_runner.py tests/test_main_window.py"

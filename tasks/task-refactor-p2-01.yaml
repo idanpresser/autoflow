@@ -1,0 +1,38 @@
+id: "task-refactor-p2-01"
+title: "Create StepType Enum to replace hardcoded strings"
+phase: "Phase 2: Magic Strings and Numbers Extraction"
+prerequisites: []
+requirements:
+- "Define a StepType Enum class (subclassing str and Enum) in src/utils/config.py."
+- "Map Enum values to 'type_text', 'keystroke', and 'wait_for_text'."
+- "Update serialization, validation, GUI step-creation, and runner logic to utilize the Enum."
+step_by_step_instructions:
+- "Open src/utils/config.py."
+- "Import Enum from enum."
+- "Define StepType(str, Enum) with TYPE_TEXT = 'type_text', KEYSTROKE = 'keystroke', and WAIT_FOR_TEXT = 'wait_for_text'."
+- "Update serialize_profile to validate that step['type'] is a valid StepType value."
+- "Open src/ui/main_window.py and replace raw string literals with StepType enum properties."
+- "Open src/engine/runner.py and update any type checks to compare with StepType members."
+- "Update tests/test_config.py to verify that invalid step types are caught by the validation function."
+tdd_instructions:
+  tests_file: "tests/test_config.py"
+  assertions:
+  - "Assert serialize_profile raises ValidationError for unsupported step types."
+  - "Assert step['type'] is serialized to its string value (e.g. 'type_text') inside the JSON output."
+  mocking_guide:
+  - "No complex mocking needed; verify Enum behavior via direct dictionary validation test cases."
+implementation_details:
+  files_to_modify:
+  - "src/utils/config.py"
+  - "src/ui/main_window.py"
+  - "src/engine/runner.py"
+  api_signature: |
+    from enum import Enum
+
+    class StepType(str, Enum):
+        TYPE_TEXT = "type_text"
+        KEYSTROKE = "keystroke"
+        WAIT_FOR_TEXT = "wait_for_text"
+  edge_cases:
+  - "Verify serialization via json.dumps continues to print clean string names instead of class prefixes (e.g. 'StepType.TYPE_TEXT'). Using str as a mixin base class solves this automatically."
+verification_command: "pytest tests/test_config.py tests/test_runner.py tests/test_main_window.py"

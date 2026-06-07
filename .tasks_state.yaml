@@ -1,0 +1,270 @@
+current_task_id: null
+target_branch: main
+tasks:
+- id: task-p1-01
+  description: Initialize the PySide6 MainWindow structure.
+  status: completed
+  branch: tdd-task-p1-01
+  worktree_path: .worktrees/task-task-p1-01
+  inputs: []
+  outputs:
+  - src/ui/main_window.py
+  - tests/test_main_window.py
+- id: task-p1-02
+  description: Create the step list layout inside MainWindow.
+  status: completed
+  branch: tdd-task-p1-02
+  worktree_path: .worktrees/task-task-p1-02
+  inputs:
+  - src/ui/main_window.py
+  outputs:
+  - src/ui/main_window.py
+  - tests/test_main_window.py
+- id: task-p1-03
+  description: Create action addition buttons in the MainWindow UI.
+  status: completed
+  branch: tdd-task-p1-03
+  worktree_path: .worktrees/task-task-p1-03
+  inputs:
+  - src/ui/main_window.py
+  outputs:
+  - src/ui/main_window.py
+  - tests/test_main_window.py
+- id: task-p1-04
+  description: Implement profile serialization to JSON dict inside config.py.
+  status: completed
+  branch: tdd-task-p1-04
+  worktree_path: .worktrees/task-task-p1-04
+  inputs: []
+  outputs:
+  - src/utils/config.py
+  - tests/test_config.py
+- id: task-p1-05
+  description: Implement save_profile_to_file inside config.py.
+  status: completed
+  branch: tdd-task-p1-05
+  worktree_path: .worktrees/task-task-p1-05
+  inputs:
+  - src/utils/config.py
+  outputs:
+  - src/utils/config.py
+  - tests/test_config.py
+- id: task-p1-06
+  description: Implement load_profile_from_file inside config.py.
+  status: completed
+  branch: tdd-task-p1-06
+  worktree_path: .worktrees/task-task-p1-06
+  inputs:
+  - src/utils/config.py
+  outputs:
+  - src/utils/config.py
+  - tests/test_config.py
+- id: task-p2-01
+  description: Create WorkflowRunner QThread skeleton.
+  status: completed
+  branch: tdd-task-p2-01
+  worktree_path: .worktrees/task-task-p2-01
+  inputs: []
+  outputs:
+  - src/engine/runner.py
+  - tests/test_runner.py
+- id: task-p2-02
+  description: Implement step loop in WorkflowRunner run method.
+  status: completed
+  branch: tdd-task-p2-02
+  worktree_path: .worktrees/task-task-p2-02
+  inputs:
+  - src/engine/runner.py
+  outputs:
+  - src/engine/runner.py
+  - tests/test_runner.py
+- id: task-p2-03
+  description: Highlight MainWindow list items during execution.
+  status: completed
+  branch: tdd-task-p2-03
+  worktree_path: .worktrees/task-task-p2-03
+  inputs:
+  - src/ui/main_window.py
+  - src/engine/runner.py
+  outputs:
+  - src/ui/main_window.py
+  - tests/test_main_window.py
+- id: task-p2-04
+  description: Implement focus_window using pygetwindow in src/engine/actions.py.
+  status: completed
+  branch: tdd-task-p2-04
+  worktree_path: .worktrees/task-task-p2-04
+  inputs: []
+  outputs:
+  - src/engine/actions.py
+  - tests/test_actions.py
+- id: task-p2-05
+  description: Implement keystroke and type_text using pyautogui in src/engine/actions.py.
+  status: completed
+  branch: tdd-task-p2-05
+  worktree_path: .worktrees/task-task-p2-05
+  inputs: []
+  outputs:
+  - src/engine/actions.py
+  - tests/test_actions.py
+- id: task-p3-01
+  description: Implement high-speed screen capture using mss.
+  status: completed
+  branch: tdd-task-p3-01
+  worktree_path: .worktrees/task-task-p3-01
+  inputs: []
+  outputs:
+  - src/vision/ocr.py
+  - tests/test_ocr.py
+- id: task-p3-02
+  description: Integrate Tesseract OCR text extraction.
+  status: completed
+  branch: tdd-task-p3-02
+  worktree_path: .worktrees/task-task-p3-02
+  inputs:
+  - src/vision/ocr.py
+  outputs:
+  - src/vision/ocr.py
+  - tests/test_ocr.py
+- id: task-p3-03
+  description: Implement wait_for_text polling trigger in runner.py.
+  status: completed
+  branch: tdd-task-p3-03
+  worktree_path: .worktrees/task-task-p3-03
+  inputs:
+  - src/engine/runner.py
+  - src/vision/ocr.py
+  outputs:
+  - src/engine/runner.py
+  - tests/test_runner.py
+- id: task-p3-04
+  description: Implement copy_and_match clipboard text using pyperclip.
+  status: completed
+  branch: tdd-task-p3-04
+  worktree_path: .worktrees/task-task-p3-04
+  inputs: []
+  outputs:
+  - src/engine/actions.py
+  - tests/test_actions.py
+- id: task-p4-01
+  description: Implement register_hotkey using keyboard module.
+  status: completed
+  branch: tdd-task-p4-01
+  worktree_path: .worktrees/task-task-p4-01
+  inputs: []
+  outputs:
+  - src/utils/hotkeys.py
+  - tests/test_hotkeys.py
+- id: task-p4-02
+  description: Link global hotkeys to spawn and start WorkflowRunner.
+  status: completed
+  branch: tdd-task-p4-02
+  worktree_path: .worktrees/task-task-p4-02
+  inputs:
+  - src/utils/hotkeys.py
+  - main.py
+  outputs:
+  - src/utils/hotkeys.py
+  - main.py
+  - tests/test_hotkeys.py
+- id: task-p4-03
+  description: Implement QSystemTrayIcon and minimize behavior.
+  status: completed
+  branch: tdd-task-p4-03
+  worktree_path: .worktrees/task-task-p4-03
+  inputs: []
+  outputs:
+  - src/ui/tray_icon.py
+  - tests/test_tray_icon.py
+- id: task-p5-01
+  description: Create PyInstaller spec file autoflow.spec.
+  status: completed
+  branch: tdd-task-p5-01
+  worktree_path: .worktrees/task-task-p5-01
+  inputs: []
+  outputs:
+  - autoflow.spec
+- id: task-p5-02
+  description: Configure local fallback path for Tesseract binary.
+  status: completed
+  branch: tdd-task-p5-02
+  worktree_path: .worktrees/task-task-p5-02
+  inputs:
+  - src/vision/ocr.py
+  outputs:
+  - src/vision/ocr.py
+  - tests/test_ocr.py
+- id: task-refactor-p1-01
+  description: Define a VisionProvider Protocol in ocr.py and refactor screen capture/extract text to implement it.
+  status: pending
+  inputs:
+  - src/vision/ocr.py
+  outputs:
+  - src/vision/ocr.py
+  - tests/test_ocr.py
+- id: task-refactor-p1-02
+  description: Inject VisionProvider into WorkflowRunner constructor.
+  status: pending
+  inputs:
+  - src/engine/runner.py
+  outputs:
+  - src/engine/runner.py
+  - tests/test_runner.py
+- id: task-refactor-p1-03
+  description: Decouple MainWindow from direct Hotkey and Runner creation.
+  status: pending
+  inputs:
+  - src/ui/main_window.py
+  outputs:
+  - src/ui/main_window.py
+  - tests/test_main_window.py
+- id: task-refactor-p2-01
+  description: Create StepType Enum to replace hardcoded strings.
+  status: pending
+  inputs:
+  - src/engine/runner.py
+  - src/ui/main_window.py
+  - src/utils/config.py
+  outputs:
+  - src/engine/runner.py
+  - src/ui/main_window.py
+  - src/utils/config.py
+  - tests/test_config.py
+- id: task-refactor-p2-02
+  description: Extract magic interval durations and hex colors into constants.
+  status: pending
+  inputs:
+  - src/engine/actions.py
+  - src/engine/runner.py
+  - src/ui/main_window.py
+  outputs:
+  - src/engine/actions.py
+  - src/engine/runner.py
+  - src/ui/main_window.py
+  - tests/test_actions.py
+- id: task-refactor-p3-01
+  description: Protect _is_running flag in WorkflowRunner using a thread-safe primitive.
+  status: pending
+  inputs:
+  - src/engine/runner.py
+  outputs:
+  - src/engine/runner.py
+  - tests/test_runner.py
+- id: task-refactor-p3-02
+  description: Deep copy steps in WorkflowRunner constructor.
+  status: pending
+  inputs:
+  - src/engine/runner.py
+  - src/ui/main_window.py
+  outputs:
+  - src/engine/runner.py
+  - src/ui/main_window.py
+  - tests/test_main_window.py
+- id: task-refactor-p3-03
+  description: Add global try-except safety block to WorkflowRunner run loop.
+  status: pending
+  inputs:
+  - src/engine/runner.py
+  outputs:
+  - src/engine/runner.py
+  - tests/test_runner.py

@@ -1,0 +1,15 @@
+# AutoFlow Dependencies
+PySide6>=6.6.0
+numpy>=1.24.0
+opencv-python>=4.8.0
+mss>=9.0.0
+pyautogui>=0.9.54
+pygetwindow>=0.0.9
+pyperclip>=1.8.2
+pytesseract>=0.3.10
+keyboard>=0.13.5
+
+# Development & Static Analysis
+pytest>=8.0.0
+ruff>=0.3.0
+mypy>=1.9.0

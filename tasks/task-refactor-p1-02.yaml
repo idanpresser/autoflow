@@ -1,0 +1,35 @@
+id: "task-refactor-p1-02"
+title: "Inject VisionProvider into WorkflowRunner constructor"
+phase: "Phase 1: Decoupling and Dependency Injection"
+prerequisites:
+- "task-refactor-p1-01"
+requirements:
+- "Modify WorkflowRunner in src/engine/runner.py to accept an optional vision_provider parameter."
+- "If vision_provider is None, default to a TesseractVisionProvider instance."
+- "In wait_for_ocr, invoke self.vision_provider.capture_screen and self.vision_provider.extract_text instead of global functions."
+step_by_step_instructions:
+- "Open src/engine/runner.py."
+- "Import VisionProvider and TesseractVisionProvider from src.vision.ocr."
+- "Modify WorkflowRunner.__init__ to accept vision_provider: VisionProvider | None = None."
+- "Save it to self.vision_provider. If None, instantiate TesseractVisionProvider()."
+- "Update WorkflowRunner.wait_for_ocr to call self.vision_provider methods."
+- "Open tests/test_runner.py and define a MockVisionProvider class."
+- "Rewrite wait_for_ocr tests to instantiate WorkflowRunner with the mock provider, removing global mock patching."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert wait_for_ocr correctly checks the mock provider methods instead of crashing."
+  mocking_guide:
+  - "Construct a MockVisionProvider whose extract_text method yields a sequence of strings (e.g. '', 'Waiting', 'Success') to test polling logic."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    from src.vision.ocr import VisionProvider
+
+    class WorkflowRunner(QThread):
+        def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
+            ...
+  edge_cases:
+  - "Verify default parameter behaves identically to before when no arguments are provided by main_window.py."
+verification_command: "pytest tests/test_runner.py"

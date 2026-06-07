@@ -1,0 +1,42 @@
+id: "task-refactor-p1-03"
+title: "Decouple MainWindow from direct Hotkey and Runner creation"
+phase: "Phase 1: Decoupling and Dependency Injection"
+prerequisites:
+- "task-refactor-p1-02"
+requirements:
+- "Modify MainWindow.__init__ in src/ui/main_window.py to accept register_hotkey_fn and runner_factory as constructor arguments."
+- "Default register_hotkey_fn to the utility function register_hotkey."
+- "Default runner_factory to a callable that instantiates WorkflowRunner."
+- "Use injected dependencies in setup_hotkey and start_current_workflow."
+step_by_step_instructions:
+- "Open src/ui/main_window.py."
+- "Import Callable and Any from typing."
+- "Modify MainWindow.__init__ signature to accept register_hotkey_fn and runner_factory."
+- "Assign them to self._register_hotkey_fn and self._runner_factory."
+- "Update setup_hotkey to call self._register_hotkey_fn."
+- "Update start_current_workflow to instantiate the runner via self._runner_factory."
+- "Open tests/test_main_window.py and tests/test_hotkeys.py and update them to use mock factories, verifying the coupling is broken."
+tdd_instructions:
+  tests_file: "tests/test_main_window.py"
+  assertions:
+  - "Assert that starting the workflow calls the injected runner factory."
+  - "Assert that setup_hotkey invokes the injected registration function with the correct key combinations."
+  mocking_guide:
+  - "Pass mock objects for register_hotkey_fn and runner_factory during unit testing to test GUI logic hermetically."
+implementation_details:
+  files_to_modify:
+  - "src/ui/main_window.py"
+  api_signature: |
+    from typing import Callable, Any
+    from PySide6.QtCore import QThread
+
+    class MainWindow(QMainWindow):
+        def __init__(
+            self, 
+            register_hotkey_fn: Callable[[str, Callable[[], None]], None] | None = None,
+            runner_factory: Callable[[list[dict[str, Any]]], QThread] | None = None
+        ) -> None:
+            ...
+  edge_cases:
+  - "Ensure main.py can instantiate MainWindow() without any arguments and work as expected."
+verification_command: "pytest tests/test_main_window.py tests/test_hotkeys.py"

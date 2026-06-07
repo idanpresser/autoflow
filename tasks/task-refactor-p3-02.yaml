@@ -1,0 +1,31 @@
+id: "task-refactor-p3-02"
+title: "Deep copy steps in WorkflowRunner constructor"
+phase: "Phase 3: Concurrency and Thread Safety"
+prerequisites: []
+requirements:
+- "Import copy in src/engine/runner.py."
+- "Perform deepcopy on the steps list when initializing WorkflowRunner."
+step_by_step_instructions:
+- "Open src/engine/runner.py."
+- "Import copy at the top of the file."
+- "Change self.steps = steps to self.steps = copy.deepcopy(steps) inside WorkflowRunner.__init__."
+- "Update tests/test_runner.py to verify that changing the passed-in dictionary/list after construction does not alter self.steps."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert that modifying the list structure passed to WorkflowRunner after instantiation doesn't alter the internal steps list."
+  mocking_guide:
+  - "Pass a mutable list of dictionaries, mutate one of them, and assert that the internal steps remain unchanged."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    import copy
+
+    class WorkflowRunner(QThread):
+        def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
+            super().__init__()
+            self.steps = copy.deepcopy(steps)
+  edge_cases:
+  - "Verify that step properties containing nested structures (like keys: ['ctrl', 'c']) are also deep copied."
+verification_command: "pytest tests/test_runner.py"

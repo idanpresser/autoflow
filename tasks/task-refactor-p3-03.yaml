@@ -1,0 +1,43 @@
+id: "task-refactor-p3-03"
+title: "Add global try-except safety block to WorkflowRunner run loop"
+phase: "Phase 3: Concurrency and Thread Safety"
+prerequisites: []
+requirements:
+- "Wrap the execution loop in WorkflowRunner.run inside a try...except Exception block."
+- "If an exception occurs, emit the error_occurred signal with the error message and exit the run method."
+- "Verify that workflow_completed is not emitted when an error occurs."
+step_by_step_instructions:
+- "Open src/engine/runner.py."
+- "Wrap the entire loop body inside the run() method with try...except Exception as e:."
+- "In the except block, call self.error_occurred.emit(str(e)) and return immediately."
+- "Open tests/test_runner.py and add a test case where a step execution fails (raises an Exception)."
+- "Verify that the error_occurred signal is captured with the correct message and that the runner terminates gracefully."
+tdd_instructions:
+  tests_file: "tests/test_runner.py"
+  assertions:
+  - "Assert that error_occurred signal is emitted when an exception is raised."
+  - "Assert that workflow_completed is not emitted on failure."
+  mocking_guide:
+  - "Mock a step or a method in the runner to raise a ValueError or RuntimeError during execution."
+implementation_details:
+  files_to_modify:
+  - "src/engine/runner.py"
+  api_signature: |
+    class WorkflowRunner(QThread):
+        def run(self) -> None:
+            try:
+                for index, step in enumerate(self.steps):
+                    if not self.is_running():
+                        break
+                    
+                    # (In future, run step action here...)
+                    
+                    self.step_finished.emit(index)
+                
+                if self.is_running():
+                    self.workflow_completed.emit("Success")
+            except Exception as e:
+                self.error_occurred.emit(str(e))
+  edge_cases:
+  - "Ensure that an exception in any step prevents any further steps from running and cancels the entire workflow."
+verification_command: "pytest tests/test_runner.py"

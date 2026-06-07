@@ -1,0 +1,44 @@
+id: "task-refactor-p1-01"
+title: "Define a VisionProvider Protocol in ocr.py"
+phase: "Phase 1: Decoupling and Dependency Injection"
+prerequisites: []
+requirements:
+- "Define a VisionProvider Protocol in src/vision/ocr.py."
+- "The protocol must declare capture_screen(self) -> np.ndarray and extract_text(self, image_np: np.ndarray) -> str."
+- "Implement TesseractVisionProvider as the default concrete class in src/vision/ocr.py."
+step_by_step_instructions:
+- "Open src/vision/ocr.py."
+- "Import Protocol and runtime_checkable from typing."
+- "Add class VisionProvider(Protocol) with capture_screen and extract_text signatures."
+- "Refactor existing capture_screen and extract_text to be methods on a new class TesseractVisionProvider."
+- "Export a default instance or the class from src/vision/ocr.py to preserve backward compatibility."
+- "Refactor tests/test_ocr.py to test the new class structure."
+tdd_instructions:
+  tests_file: "tests/test_ocr.py"
+  assertions:
+  - "Assert that TesseractVisionProvider implements the VisionProvider Protocol."
+  - "Assert that a mock provider can be substituted and returned in tests."
+  mocking_guide:
+  - "Use a mock vision provider that returns a dummy numpy array and a pre-determined string to avoid touching the OS GUI during test execution."
+implementation_details:
+  files_to_modify:
+  - "src/vision/ocr.py"
+  api_signature: |
+    from typing import Protocol, runtime_checkable
+    import numpy as np
+
+    @runtime_checkable
+    class VisionProvider(Protocol):
+        def capture_screen(self) -> np.ndarray:
+            ...
+        def extract_text(self, image_np: np.ndarray) -> str:
+            ...
+
+    class TesseractVisionProvider(VisionProvider):
+        def capture_screen(self) -> np.ndarray:
+            ...
+        def extract_text(self, image_np: np.ndarray) -> str:
+            ...
+  edge_cases:
+  - "Ensure old module-level functions capture_screen and extract_text are either kept as convenience wrappers calling a default provider or updated cleanly across all files."
+verification_command: "pytest tests/test_ocr.py"
