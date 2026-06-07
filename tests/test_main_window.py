@@ -101,6 +101,7 @@ def test_main_window_highlight_step(qapp: QApplication) -> None:
 
 def test_main_window_dependency_injection(qapp: QApplication) -> None:
     from unittest.mock import MagicMock
+
     from src.ui.main_window import MainWindow
 
     mock_register = MagicMock()

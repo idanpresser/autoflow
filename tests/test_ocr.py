@@ -50,7 +50,7 @@ def test_tesseract_fallback_path() -> None:
 
 
 def test_vision_provider_protocol() -> None:
-    from src.vision.ocr import VisionProvider, TesseractVisionProvider
+    from src.vision.ocr import TesseractVisionProvider, VisionProvider
 
     assert issubclass(TesseractVisionProvider, VisionProvider)
 

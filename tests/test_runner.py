@@ -96,6 +96,7 @@ def test_workflow_runner_wait_for_ocr_stop() -> None:
 
 def test_workflow_runner_vision_injection() -> None:
     import numpy as np
+
     from src.vision.ocr import VisionProvider
 
     class MockVisionProvider(VisionProvider):
@@ -146,7 +147,8 @@ def test_workflow_runner_thread_safe_stop() -> None:
 
 
 def test_workflow_runner_steps_deep_copy() -> None:
-    steps = [{"type": "type_text", "text": "hello"}]
+    from typing import Any
+    steps: list[dict[str, Any]] = [{"type": "type_text", "text": "hello"}]
     runner = WorkflowRunner(steps)
 
     # Mutate the original steps list and dictionary

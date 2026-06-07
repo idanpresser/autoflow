@@ -121,8 +121,9 @@ def test_load_profile_from_file_malformed_json(tmp_path: Path) -> None:
 
 
 def test_step_type_enum() -> None:
-    from src.utils.config import StepType, serialize_profile
     import pytest
+
+    from src.utils.config import StepType, serialize_profile
 
     # Verify Enum values
     assert StepType.TYPE_TEXT == "type_text"

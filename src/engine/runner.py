@@ -3,8 +3,7 @@ from typing import Any
 
 from PySide6.QtCore import QMutex, QMutexLocker, QThread, Signal
 
-from src.vision.ocr import VisionProvider, TesseractVisionProvider
-
+from src.vision.ocr import TesseractVisionProvider, VisionProvider
 
 DEFAULT_OCR_POLL_INTERVAL = 0.5
 
@@ -14,21 +13,30 @@ class WorkflowRunner(QThread):
     workflow_completed = Signal(str)
     error_occurred = Signal(str)
 
-    def __init__(self, steps: list[dict[str, Any]], vision_provider: VisionProvider | None = None) -> None:
+    def __init__(
+        self,
+        steps: list[dict[str, Any]],
+        vision_provider: VisionProvider | None = None,
+    ) -> None:
         super().__init__()
         import copy
+
         self.steps = copy.deepcopy(steps)
         self._mutex = QMutex()
         self._is_running = True
-        self.vision_provider = vision_provider if vision_provider is not None else TesseractVisionProvider()
+        self.vision_provider = (
+            vision_provider
+            if vision_provider is not None
+            else TesseractVisionProvider()
+        )
 
     def stop(self) -> None:
-        locker = QMutexLocker(self._mutex)
-        self._is_running = False
+        with QMutexLocker(self._mutex):
+            self._is_running = False
 
     def is_running(self) -> bool:
-        locker = QMutexLocker(self._mutex)
-        return self._is_running
+        with QMutexLocker(self._mutex):
+            return self._is_running
 
     def run(self) -> None:
         try:

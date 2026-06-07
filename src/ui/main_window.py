@@ -1,6 +1,7 @@
-from typing import Any, Callable
+from collections.abc import Callable
+from typing import Any
 
-from PySide6.QtCore import QObject, QThread, Qt, Signal
+from PySide6.QtCore import QObject, Qt, Signal
 from PySide6.QtGui import QCloseEvent, QColor
 from PySide6.QtWidgets import (
     QHBoxLayout,
@@ -29,7 +30,7 @@ class MainWindow(QMainWindow):
     def __init__(
         self,
         register_hotkey_fn: Callable[[str, Callable[[], None]], None] | None = None,
-        runner_factory: Callable[[list[dict[str, Any]]], QThread] | None = None,
+        runner_factory: Callable[[list[dict[str, Any]]], WorkflowRunner] | None = None,
     ) -> None:
         super().__init__()
         self._register_hotkey_fn = (

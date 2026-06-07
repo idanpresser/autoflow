@@ -1,5 +1,5 @@
 import json
-from enum import Enum
+from enum import StrEnum
 from pathlib import Path
 from typing import Any, cast
 
@@ -8,7 +8,7 @@ class ValidationError(Exception):
     pass
 
 
-class StepType(str, Enum):
+class StepType(StrEnum):
     TYPE_TEXT = "type_text"
     KEYSTROKE = "keystroke"
     WAIT_FOR_TEXT = "wait_for_text"
@@ -45,7 +45,7 @@ def serialize_profile(profile_dict: dict[str, Any]) -> str:
             raise ValidationError(f"Step at index {idx} must be a dictionary")
         if "type" not in step:
             raise ValidationError(f"Step at index {idx} is missing required field: type")
-        
+
         step_type = step["type"]
         try:
             StepType(step_type)
